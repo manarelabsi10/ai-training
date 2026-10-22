@@ -2,6 +2,18 @@
 
 Weekly sessions for learning to work with AI APIs in Python.
 
+## Project structure
+
+```
+test-app/
+├── src/test_app/
+│   ├── __init__.py
+│   ├── main.py      # Summarizer using the Gemini API
+├── .env.example
+├── pyproject.toml
+└── README.md
+```
+
 ## Setup
 
 1. Clone the repo and open the folder.
