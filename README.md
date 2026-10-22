@@ -2,6 +2,19 @@
 
 Weekly sessions for learning to work with AI APIs in Python.
 
+## Project structure
+
+```
+test-app/
+├── src/test_app/
+│   ├── __init__.py
+│   ├── main.py      # Summarizer using the Gemini API
+│   └── local.py     # Summarizer using a local Ollama model
+├── .env.example
+├── pyproject.toml
+└── README.md
+```
+
 ## Setup
 
 1. Clone the repo and open the folder.
@@ -53,6 +66,7 @@ Branch: `session1`
 | | Gemini | Ollama |
 |---|---|---|
 | Runs on | Google servers | Local machine |
+| Needs | API key + internet | Ollama + enough RAM |
 | Max length | `max_output_tokens` | `num_predict` |
 | Instructions | `system_instruction` | `system` message |
 | Parameters | `GenerateContentConfig(...)` | `options={...}` |
@@ -61,3 +75,7 @@ Branch: `session1`
 - Small local models are less accurate than Gemini, especially on long or Arabic text.
 
 Branch: `session_1_assignment`
+
+## Notes
+
+- Model used locally: `gemma3:1b` (about 0.8 GB), chosen to fit a machine with 8 GB RAM.
