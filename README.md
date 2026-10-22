@@ -1,4 +1,4 @@
-# ML Training
+# AI Training
 
 Weekly sessions for learning to work with AI APIs in Python.
 
