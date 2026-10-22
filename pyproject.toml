@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "google-genai>=2.31.0",
+    "ollama>=0.6.3",
     "python-dotenv>=1.2.4",
 ]
 
