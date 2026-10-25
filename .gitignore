@@ -1,1 +1,8 @@
 .env
+.venv/
+temp_auto_push.bat
+__pycache__/
+*.py[cod]
+.streamlit/secrets.toml
+.gitignore
+branch_structure.json

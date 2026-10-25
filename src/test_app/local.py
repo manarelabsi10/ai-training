@@ -1,10 +1,10 @@
 import ollama
 
-PROMPT = "You are a summarizer. Summarize the text in 3 to 5 short sentences."
+PROMPT = "You are a summarizer. Summarize the text in 1 to 3 short sentences."
 
 
 def summarize(text):
-    r = ollama.chat(
+    response = ollama.chat(
         model="gemma3:1b",
         messages=[
             {"role": "system", "content": PROMPT},
@@ -12,7 +12,7 @@ def summarize(text):
         ],
         options={"temperature": 0.3, "num_predict": 300},
     )
-    return r["message"]["content"]
+    return response["message"]["content"]
 
 
 print("enter your text...")

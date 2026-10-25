@@ -1,0 +1,866 @@
+[
+  {
+    "page": 1,
+    "text": " \n \n \nFitStyle AI \nAI-Powered Fashion Fitting Platform with Cloud Computing \n \n \n \n \n \n \n \n \n \n \n \n  \n \n \nProgram: \nM.S. in Computer Science \nSupervisor/Advisor: \nDr. Anwar Hossain \nDate Submitted: \n20/10/2026 \n Student Name ID \n1 Afnan Mohamed Ali Dior 20596319 \n2 Alaa Ehab Mohamed El Shenawy 20596313 \n3 Hind Alaa Fathy Abdelhalim Ahmed 20596337 \n4 Manar Samir Mohamed Elabsi 20596305 \n"
+  },
+  {
+    "page": 2,
+    "text": "2 \nAbstract \nWhat if you could try on an outfit without leaving your screen? Online shoppers still guess their size, guess which \npieces go together  and guess how a garment will look on them, and wrong guesses end in returns and lost \nconfidence. FitStyle AI answers these guesses in one shopping workflow. From a single full-body photograph and \nher height, a body -measurement model estimates shoulder, wa ist and hip widths, a body shape and a clothing \nsize. An outfit-recommendation engine then proposes five complete outfits for her size, body shape, occasion and \nseason, offers only items that are in stock in her size, and explains each choice in plain language. The shopper can \nswap any piece, preview the look on her own photograph with the LaDI -VTON virtual try-on model, build a cart,"
+  },
+  {
+    "page": 2,
+    "text": "the LaDI -VTON virtual try-on model, build a cart, \nand reserve or pay for it. The web application runs locally, its database and authentication use cloud services \nwithin free -tier limits, and the try -on model runs as a service on a free GPU notebook runtime. The \nrecommendation engine, the most data -driven component, was evaluated against catalogue -derived labels: a \nrebalanced compatibility model reached 0.789 held-out accuracy, up from 0.646, and a per-item reuse cap raised \nthe number of distinct items in the top five outfits from 8 to 14. For body measurement, replacing landmark \ndistances with silhouette widths corrected an implausible hip estimate on a test photograph. The try -on model \nwas assessed only qualitatively, and generating an outfit takes minutes on a free GPU. No u"
+  },
+  {
+    "page": 2,
+    "text": "rating an outfit takes minutes on a free GPU. No user study was \nconducted, so claims about shopper preference remain open. The project shows that measurement, \nrecommendation and preview can be combined in one low-cost application. "
+  },
+  {
+    "page": 3,
+    "text": "3 \nAcknowledgements \nWe would like to express our sincere gratitude to our supervisor, Dr. Anwar Hossain, for his guidance, constructive \nfeedback and encouragement throughout this project. His comments shaped both the technical direction and the \nway in which the work is reported. \nWe thank Queen’s University and the Digilians programme for the teaching, the resources and the learning \nenvironment that made this work possible, and our instructors and colleagues for the discussions that he lped us \nrefine our ideas. \nWe also thank the Ministry of Communications and Information Technology, the Military Academy and Capgemini \nfor the training programme and for the opportunity to carry out this project, and Eng. Farida Shaheen from \nCapgemini, who accompanied us throughout the project, for he"
+  },
+  {
+    "page": 3,
+    "text": " who accompanied us throughout the project, for her guidance and support. \nWe are grateful to the open-source community and to the providers of the free services on which the platform is \nbuilt, including Amazon Web Services, Hugging Face, Supabase and Groq, as w ell as to the authors of the public \nresearch and datasets cited in this report. Their openness made it possible to build a complete system at almost \nno cost. "
+  },
+  {
+    "page": 4,
+    "text": "4 \nTable of contents \n1. Introduction ........................................................................................................................................................8 \n1.1 Background ......................................................................................................................................................8 \n1.2 Problem Statement ..........................................................................................................................................8 \n1.3 Motivation .......................................................................................................................................................8 \n1.4 Project Overview ......................................................................................"
+  },
+  {
+    "page": 4,
+    "text": ".........................................................................................................8 \n1.5 Objectives .........................................................................................................................................................9 \n1.6 Research Questions .........................................................................................................................................9 \n1.7 Scope and Limitations ................................................................................................................................... 10 \n1.8 Contributions ................................................................................................................................................ 10 \n1.9 Report Organisation ....."
+  },
+  {
+    "page": 4,
+    "text": "................ 10 \n1.9 Report Organisation ..................................................................................................................................... 10 \n2. Background and Literature Review ................................................................................................................. 11 \n2.1 Size and Fit in Online Fashion ....................................................................................................................... 11 \n2.2 Vision–Language Representations for Fashion ............................................................................................ 12 \n2.3 Outfit Compatibility Learning ....................................................................................................................... 12 \n2"
+  },
+  {
+    "page": 4,
+    "text": "............................................ 12 \n2.4 Outfit Recommendation Systems in Practice .............................................................................................. 12 \n2.5 Model Combination, Branch Balance and Diversity .................................................................................... 12 \n2.6 Sensitivity of Weighted-Sum Rankings ........................................................................................................ 13 \n2.7 Virtual Try-On ............................................................................................................................................... 13 \n2.8 Summary of Related Work and Research Gap ............................................................................................. 14 \n3. Me"
+  },
+  {
+    "page": 4,
+    "text": "........................................ 14 \n3. Methodology ................................................................................................................................................... 17 \n3.1 Overall Pipeline ............................................................................................................................................. 17 \n3.2 Model 1: Body Measurement and Size Estimation ..................................................................................... 17 \n3.3 Model 2: Outfit Recommendation Engine ................................................................................................... 20 \n3.4 Model 3: Virtual Try-On ..........................................................................................................."
+  },
+  {
+    "page": 4,
+    "text": "....................................................................... 23 \n3.5 Evaluation Methodology .............................................................................................................................. 24 \n3.6 Development Approach, Tools and Technology Choices ............................................................................ 25 \n4. Design and Implementation ............................................................................................................................ 26 \n4.1 Architecture Overview .................................................................................................................................. 26 \n4.2 Data Design ..............................................................................................."
+  },
+  {
+    "page": 4,
+    "text": "...................................................................................................... 27 \n4.3 Recommendation Service ............................................................................................................................. 27 \n4.4 User Interface................................................................................................................................................ 28 \n4.5 Integration of the AI Models ........................................................................................................................ 30 "
+  },
+  {
+    "page": 5,
+    "text": "5 \n4.6 Security and Cost Considerations ................................................................................................................. 32 \n4.7 Implementation Challenges ......................................................................................................................... 32 \n4.8 Platform Features ......................................................................................................................................... 33 \n5. Results and Evaluation .................................................................................................................................... 35 \n5.1 Evaluation Protocol and Data ....................................................................................................................... 35 \n5."
+  },
+  {
+    "page": 5,
+    "text": "........................................... 35 \n5.2 Body-Measurement and Size Model (Model 1) ........................................................................................... 35 \n5.3 Outfit Recommendation Engine (Model 2) .................................................................................................. 36 \n5.4 Virtual Try-On Model (Model 3) ................................................................................................................... 38 \n5.5 Summary and Threats to Validity ................................................................................................................. 41 \n6. Discussion ............................................................................................................................................."
+  },
+  {
+    "page": 5,
+    "text": "............................................................. 43 \n6.1 Interpretation of the Compatibility Results ................................................................................................. 43 \n6.2 Stability and Design Choices ......................................................................................................................... 43 \n6.3 Trade-offs of Pre-Computation .................................................................................................................... 43 \n6.4 Relation to Existing Work ............................................................................................................................. 43 \n6.5 Fairness, Inclusivity and Ethical Considerations ........................................................."
+  },
+  {
+    "page": 5,
+    "text": "................................................................................... 44 \n6.6 Were the Objectives Met? ............................................................................................................................ 44 \n6.7 Discussion of Models 1 and 3 and of the Integrated System ...................................................................... 44 \n7. Conclusion and Future Work ........................................................................................................................... 46 \n7.1 Conclusion ..................................................................................................................................................... 46 \n7.2 Future Work .........................................................................."
+  },
+  {
+    "page": 5,
+    "text": ".......................................................................................................................... 46 \nReferences ............................................................................................................................................................... 48 \nAppendices .............................................................................................................................................................. 50 \nAppendix A. System Architecture and Recommendation Interfaces ............................................................... 50 \nAppendix B. Recommendation Pipeline Configuration ..................................................................................... 50 \nAppendix C. Pipeline Summary ........................."
+  },
+  {
+    "page": 5,
+    "text": "ndix C. Pipeline Summary .......................................................................................................................... 51 \nAppendix D. Catalogue Description ................................................................................................................... 51 \nAppendix E. Body-Shape and Occasion Prompts ............................................................................................... 52 \nAppendix F. Reproducibility ............................................................................................................................... 52 \nAppendix G. Appendices for Models 1 and 3 ..................................................................................................... 53 \nAppendix H. Application Screens .........."
+  },
+  {
+    "page": 5,
+    "text": "... 53 \nAppendix H. Application Screens ....................................................................................................................... 54 \nAppendix I. MediaPipe Pose Landmarks ............................................................................................................ 61 \nAppendix J. Body-Measurement Service Interface ........................................................................................... 62 \nAppendix K. Virtual Try-On Service Interface .................................................................................................... 62 "
+  },
+  {
+    "page": 6,
+    "text": "6 \n \nList of Tables and Figures \nTable 1.1. Main components of FitStyle AI.................................................................................................................9 \nTable 2.1. Summary of the outfit-recommendation literature cited in this report. ............................................... 14 \nTable 2.2. Distinguishing properties of the outfit-recommendation approaches. ................................................. 14 \nTable 2.3. Approaches related to the body-measurement and virtual try-on components. .................................. 15 \nFigure 3.1. End-to-end flow of a shopper through FitStyle AI. ................................................................................ 17 \nFigure 3.2. Pipeline of the body-measurement model. ......................"
+  },
+  {
+    "page": 6,
+    "text": "the body-measurement model. .......................................................................................... 18 \nFigure 3.3. Pipeline of the outfit recommendation engine (A: offline preparation, B: online use). ....................... 20 \nFigure 3.4. Pipeline of the virtual try-on model (Model 3) and the stages added around LaDI-VTON. .................. 23 \nTable 3.1. Tools and technology choices. ................................................................................................................ 25 \nFigure 4.1. System architecture of FitStyle AI. ........................................................................................................ 26 \nTable 4.1. Layers of the FitStyle AI implementation. .............................................................."
+  },
+  {
+    "page": 6,
+    "text": ".................................................................................. 26 \nFigure 4.2. Try-on step: the recommended outfit (left), the preview of the shopper (centre) and the shopper’s \nselection (right). ...................................................................................................................................................... 28 \nFigure 4.3. Panels of the try-on step: (a) recommended outfit, (b) all five outfits and (c) shopper’s selection. .... 29 \nFigure 4.4. Dialog listing the tops that suit the shopper’s profile; choosing one replaces the current top............ 30 \nFigure 4.5. Explanation card (“Why this outfit”) shown below the preview........................................................... 30 \nFigure 4.6. Body-measurement step: extracted me"
+  },
+  {
+    "page": 6,
+    "text": "0 \nFigure 4.6. Body-measurement step: extracted metrics with an editable size selector (left) and the annotated \nphotograph (right). .................................................................................................................................................. 31 \nTable 4.2. Integration challenges and the measures taken. ................................................................................... 32 \nTable 4.3. Features of the application. .................................................................................................................... 33 \nTable 5.1. Hip-width estimate for one test photograph: landmark baseline and segmentation-based method. .. 35 \nTable 5.2. Behaviour of the hybrid waist detection across garment types. ........................."
+  },
+  {
+    "page": 6,
+    "text": "on across garment types. ............................................................ 35 \nTable 5.3. Held-out accuracy of the compatibility models. ..................................................................................... 36 \nFigure 5.1. Feature ablation: test accuracy with visual features only, metadata only, both (linear model) and with \nthe CompatibilityNet v2. ......................................................................................................................................... 36 \nFigure 5.2. Validation accuracy for different weights on the CompatibilityNet (w = 0 is the linear model alone). 37 \nFigure 5.3. Effect of the per-item reuse cap on the number of distinct items (a) and on set-level scores (b). ...... 37 \nFigure 5.4. Top five outfits returned by "
+  },
+  {
+    "page": 6,
+    "text": ".... 37 \nFigure 5.4. Top five outfits returned by the notebook for a sample profile. .......................................................... 38 \nTable 5.4. Try-on runs recorded in the notebook and in the website. ................................................................... 39 \nFigure 5.5. Try-on from the website: (a) the shopper’s photograph while the try-on is being generated and (b) \nthe result, in which the top of the selected outfit is rendered on the shopper. .................................................... 41 "
+  },
+  {
+    "page": 7,
+    "text": "7 \nFigure 5.6. Try-on runs in the notebook: (a) a dress; (b) trousers and a T-shirt from 60 × 80 pixel catalogue \nimages. Each row shows the shopper’s photograph, the garment image and the result; in (b) the trousers are \napplied first and the T-shirt second......................................................................................................................... 40 \nTable 6.1. Status of the project objectives. ............................................................................................................. 44 \nTable A.1. Recommendation interfaces. ................................................................................................................. 50 \nTable B.1. Parameters of the recommendation pipeline. ..............................................."
+  },
+  {
+    "page": 7,
+    "text": "e. ....................................................................................... 50 \nTable D.1. Catalogue composition by garment category. ....................................................................................... 51 \nTable E.1. Silhouette preferences used for the body-shape score. ........................................................................ 52 \nTable G.1. Parameters of the body-measurement model (from the notebook and the service file). .................... 53 \nTable G.2. Parameters of the virtual try-on model and service (from the notebook). ........................................... 53 \nFigure H.1. Landing page. ........................................................................................................................................ 54 \n"
+  },
+  {
+    "page": 7,
+    "text": "............................................. 54 \nFigure H.2. Authentication screens: (a) shopper sign-in, (b) store-owner sign-in, (c) shopper sign-up and (d) store-\nowner sign-up, which is by invitation only. ............................................................................................................. 55 \nFigure H.3. Step 1: upload of the photograph and choice of the occasion. ............................................................ 55 \nFigure H.4. Step 4: creation of the order, listing the chosen pieces by category slot, with export of a PDF \nsummary. ................................................................................................................................................................. 56 \nFigure H.5. Shopping cart with the selected pieces, t"
+  },
+  {
+    "page": 7,
+    "text": "ure H.5. Shopping cart with the selected pieces, the order summary, a promo-code field and the choice \nbetween buying online and paying offline. ............................................................................................................. 57 \nFigure H.6. Step 5: payment in the sandbox gateway with a test card. .................................................................. 57 \nFigure H.7. Step 6: order confirmation with delivery tracking and the download of the PDF summary. ............... 58 \nFigure H.8. PDF summary of an order paid offline, with the QR code and the shop location. ............................... 59 \nFigure H.9. Store owner’s inventory dashboard. .................................................................................................... 59 \nFigu"
+  },
+  {
+    "page": 7,
+    "text": "......................................... 59 \nFigure H.10. Store owner’s sales and analytics dashboard. .................................................................................... 60 \nFigure H.11. Try-on step after generation: the preview shows the shopper wearing the white top of the selected \noutfit, and the status label reads “Virtual Fitting Active”. ...................................................................................... 61 \nTable I.1. The 33 pose landmarks and their use in the body-measurement model. .............................................. 61 \nTable J.1. Request and response of the body-measurement service (from the service file). ................................. 62 \nTable K.1. Interface of the virtual try-on service (from the notebook). ..............."
+  },
+  {
+    "page": 7,
+    "text": "ry-on service (from the notebook). .................................................................. 62 \n "
+  },
+  {
+    "page": 8,
+    "text": "8 \n1. Introduction \n1.1 Background \nOnline fashion retail lets shoppers browse thousands of products from home, but it lacks two things that a physical \nfitting room provides: confirmation that a garment will fit the wearer, and the chance to see how pieces look \ntogether on her. Han et al. observe that the ubiquity of online fashion shopping demands effective \nrecommendation services for customers [4]. Fit is a commercial as well as a personal problem: Sheikh et al. note \nthat predicting the correct fit improves customer satisfaction and reduces the cost of size -related returns [13]. \nStyle is a second source of uncertainty: Koukopoulos et al. argue that outfit recommendat ions simplify decision-\nmaking, increase consumer confidence and raise conversion rates [7]. At the same time, advan"
+  },
+  {
+    "page": 8,
+    "text": "aise conversion rates [7]. At the same time, advances in computer \nvision, vision–language models and managed cloud services make it feasible to offer these capabilities inside an \nordinary web shop. \n1.2 Problem Statement \nA shopper who buys clothes online faces three connected problems. (i) Size uncertainty: size charts differ between \nbrands and shoppers rarely know their own measurements, so they order several sizes or return items. (ii) Outfit \nuncertainty: shops usually present products one by one, leaving the shopper to decide which garments go \ntogether for a given occasion and body shape. (iii) Lack of preview: the shopper cannot see a garment on herself \nbefore buying. These problems are norm ally handled by separate tools, if at all, so the shopper must combine \nseveral sources "
+  },
+  {
+    "page": 8,
+    "text": "all, so the shopper must combine \nseveral sources of advice by herself. The problem addressed by this project is how to bring measurement, \nrecommendation and preview together in one low-cost shopping application whose database and authentication \nuse cloud services. \n1.3 Motivation \nA single workflow that starts from one photograph can remove manual steps for the shopper and give the shop \nfewer wrong -size purchases and a more engaging experience. The project is also motivat ed by a practical \nengineering question: whether a complete application with three AI components, user accounts, a product \ncatalogue, a cart, checkout and administrator tools can be built by a small team using the free tiers of managed \ncloud services for data, authentication and storage, with the cloud resources de"
+  },
+  {
+    "page": 8,
+    "text": "ntication and storage, with the cloud resources defined as code so that they can be \nreproduced. \n1.4 Project Overview \nFitStyle AI  is an AI -powered fashion fitting platform with cloud computing. The shopper creates an account, \nuploads a full-body photograph, reviews the body measurements and clothing size that the system infers, chooses \nan occasion, receives recommended outfits, previews garments on her photograph, and adds the selected items \nto a cart and pays. Administrators manage the product catalogue and view sales analytics. The front end is a React \nsingle-page application and the back end is a Node.js/Express server; both run locally on the team’s machine and \nare not hosted in the cloud. The cloud is used for identity and data only: authentication uses Amazon Cognito, the \nc"
+  },
+  {
+    "page": 8,
+    "text": "a only: authentication uses Amazon Cognito, the \ncatalogue, user profiles, carts, measurements and orders are stored in Amazon DynamoDB, product images are \nkept in Supabase Storage, and the AWS resources are defined with Terraform. Three AI components are integrated \ninto the shopper’s journey (Table 1.1 and Figure 3.1). "
+  },
+  {
+    "page": 9,
+    "text": "9 \nTable 1.1. Main components of FitStyle AI. \nComponent Purpose Documented in \nWeb platform: React front end, \nExpress server, Cognito, DynamoDB, \nTerraform \nAccounts, catalogue, cart, checkout, orders, administrator \ntools \nSections 3.6 and 4 \nModel 1: body measurement and size \nestimation \nInfers body measurements, body shape and clothing size \nfrom a photograph \nSections 2.1, 3.2, 4.5, 5.2 \nand Appendix G \nModel 2: outfit recommendation \nengine \nRecommends five complete outfits for the shopper’s size, \nbody shape, occasion and season, with an explanation \nSections 3.3, 4.3, 5.3 and \nthe Appendices \nModel 3: virtual try-on Renders the selected top, bottom or dress on the \nshopper’s photograph with the LaDI-VTON latent-diffusion \ntry-on model \nSections 2.7, 3.4, 4.5, 5.4 \nand Appendices "
+  },
+  {
+    "page": 9,
+    "text": "odel \nSections 2.7, 3.4, 4.5, 5.4 \nand Appendices G, H and \nK \n \nThe output of Model 1 is the input of Model 2: the body shape and size inferred from the photograph, together \nwith the occasion chosen by the shopper, define the profile for which outfi ts are recommended. The selected \noutfit then supplies the garment image that Model 3 renders. \n1.5 Objectives \nThe objectives of the project are as follows. \n• O1. Platform. To build a secure web application, whose data and authentication are handled by cloud \nservices, with user accounts, a product catalogue, a shopping cart, checkout and order history, and \nadministrator tools for product management and sales analytics. \n• O2. Body measurement and size. To estimate body measurements, body shape and clothing size from a \nsingle full-body ph"
+  },
+  {
+    "page": 9,
+    "text": "hape and clothing size from a \nsingle full-body photograph (Model 1). \n• O3. Outfit recommendation. To recommend complete outfits that suit the shopper’s size, body shape, \noccasion and season, using only products that are in stock in her size, and to explain each recommendation \n(Model 2). \n• O4. Virtual try-on. To let the shopper preview a selected garment on her own photograph (Model 3). \n• O5. Integration. To connect the three models and the platform into one workflow in which the output of \neach stage is the input of the next. \n• O6. Low cost and reproducibility.  To design the system so that the cloud services it uses (a database, \nauthentication and image storage) stay within free-tier limits, and to define the AWS resources as code. \n• O7. Evaluation. To evaluate each AI component "
+  },
+  {
+    "page": 9,
+    "text": " \n• O7. Evaluation. To evaluate each AI component and the integrated system with stated metrics, and to \nreport limitations openly. \n1.6 Research Questions \nThe project addresses four research questions. RQ1: how accurately can body me asurements, a body shape and \na clothing size be inferred from a single photograph and the shopper’s stated height? RQ2: can a catalogue -\ngrounded recommendation engine compose complete outfits that suit a shopper’s size, body shape, occasion and "
+  },
+  {
+    "page": 10,
+    "text": "10 \nseason, remain diverse, and use only products that are in stock in her size? RQ3: how much does a learned pairwise \ncompatibility model add over simple baselines when its labels are derived from catalogue attributes? RQ4: can a \ncommerce platform and three AI component s be integrated using only the free tiers of cloud services for data, \nauthentication and storage? \n1.7 Scope and Limitations \nThe project covers the full shopper journey from photograph to payment for a single shop with a catalogue of \n11,513 products drawn from a public dataset [14]. The catalogue stocks sizes S to XL only. The AI components are \nevaluated on the data described in Section 5; no user study has been conducted, and the compatibility labels used \nby the recommendation engine are derived from catal ogue att"
+  },
+  {
+    "page": 10,
+    "text": "ommendation engine are derived from catal ogue attributes rather than human judgements, so its \naccuracy figures measure agreement with that proxy and not real shopper preference (Section 5.5). Payment is \nsimulated for the purposes of the project. The body -measurement model uses a single front -facing photograph \nand a stated height, and its behaviour has so far been examined on a few photographs without tape -measure \nground truth (Section 5.2). \n1.8 Contributions \nThe contributions of the project are: (i) an integrated platform that combines body measur ement, outfit \nrecommendation and virtual try-on with account management, catalogue, cart and checkout; (ii) a low-cost design \nin which only the database, authentication and image storage are cloud services on free tiers, defined as co"
+  },
+  {
+    "page": 10,
+    "text": "ge are cloud services on free tiers, defined as code, \nand the recommenda tions are pre -computed; and (iii) the three AI components themselves. For the \nrecommendation engine, the contributions are a capacity -rebalanced compatibility network with a validation -\nselected ensemble, a beam-search outfit construction with a per-item reuse cap and a compatibility floor, and an \nend-to-end evaluation across several profiles (Section 5.3). For Model 1, the contribution is a transparent \nmeasurement pipeline in which two experimentally diagnosed weaknesses of a landmark-based baseline, the hip \nwidth and the waist under loose clothing, are corrected, and in which the reliability of every waist estimate is \nreported together with its value; for Model 3, the contribution is the integration of the "
+  },
+  {
+    "page": 10,
+    "text": "del 3, the contribution is the integration of the open LaDI -VTON model \ninto the shop workflow, throug h a garment-cleaning stage that makes catalogue photographs usable, a layered \nprocedure for outfits made of a top and a bottom, the restoration of the shopper’s face, hair and shoes after \ngeneration, and a queued GPU service that the website calls (Sections 3.4 and 4.5). \n1.9 Report Organisation \nSection 2 reviews the background and related literature. Section 3 describes the methodology, including the tools \nand technology choices, and Section 4 the design and implementation of the platform. Section 5 present s the \nresults and evaluation, Section 6 the discussion, and Section 7 the conclusion and future work. References and \nAppendices follow. "
+  },
+  {
+    "page": 10,
+    "text": "s follow. "
+  },
+  {
+    "page": 11,
+    "text": "11 \n2. Background and Literature Review \n2.1 Size and Fit in Online Fashion \nFit is a central source of friction in online fashio n. Sheikh et al. propose a deep -learning, content-collaborative \napproach to personalised size and fit recommendation and report that it improves over previously published \nresults on two public datasets [13]. Such systems infer fit from purchase history and article data. FitStyle AI instead \nestimates body measurements directly from a photograph, so that a shopper with no purchase history can still \nreceive a size. \nEstimating body measurements from a single photograph combines three sub -problems: locating the body, \ndelimiting its contour, and recovering absolute scale. For locating the body, BlazePose is a lightweight \nconvolutional network that infers 33 b"
+  },
+  {
+    "page": 11,
+    "text": "ightweight \nconvolutional network that infers 33 body keypoints and was designed for real-time inference on mobile devices \n[16]. The MediaPipe Pose Landmarke r used in this project follows the same 33 -landmark scheme, returns \nlandmarks in image and in world coordinates, and can optionally return a segmentation mask that gives, for each \npixel, the likelihood of belonging to the detected person [22]. The distinct ion between the two outputs matters \nfor clothing measurements: landmarks such as the hips mark internal joint centres, not the external contour on \nwhich garments are sized, so a distance between landmarks is not a body width. A segmentation mask, in contrast, \ncan be read at any height and therefore gives widths at the shoulders, chest, waist, hips and thigh. \nA single image h"
+  },
+  {
+    "page": 11,
+    "text": "s, chest, waist, hips and thigh. \nA single image has no absolute scale. Günel et al. note that recovering a person’s height from one image is \nimportant for virtual garment fitting but i nherently ambiguous without camera information, and report as their \ncentral finding that height can only be estimated with large uncertainty [21]. FitStyle AI therefore does not infer \nthe shopper’s height; it asks for it and uses it as the reference length. \nThe measurement module started from a landmark-based baseline in which each body dimension is computed as \nthe Euclidean distance between two landmarks and converted to centimetres with a factor derived from the \nperson’s known height. Section 3.2 describes two limitations of this baseline that were found experimentally and \nthe corrections that were"
+  },
+  {
+    "page": 11,
+    "text": "ound experimentally and \nthe corrections that were made. Finally, multimodal language models offer an alternative route: Qwen2.5-VL can \nlocalise objects and interpret images [17], and the project keeps such a model as a fallback when the measurement \nservice is unavailable. A language model provides no geometric guarantee, so its output is treated as an estimate \nthat must be validated by rules. \nLearning-based methods estimate body measurements directly. Ruiz et al. train a Body Measurement network on \nsilhouette images of real subjects, augment its training data with an adversarial body simulator built on a \nparametric body model, and release BodyM, a dataset of frontal and lateral silhouettes with height, weight and  \nmeasurements derived from 3D scans; their setting constrains the pos"
+  },
+  {
+    "page": 11,
+    "text": "ed from 3D scans; their setting constrains the pose and uses height and weight as inputs [23]. \nThis method needs training data and two views; the geometric approach of this project needs no training data \nand a single view, at the price of the limitations discussed in Section 6.7. \nBody-shape classification is a separate problem. The Female Figure Identification Technique (FFIT) distinguishes \nnine shapes (hourglass, bottom hourglass, top hourglass, spoon, rectangle, diamond, oval, triangle and inverted \ntriangle) from girth measurements, which is an advance on earlier classifications based on 2D widths [24]. Parker \net al. show, however, that slight differences in the definition of the measurements can place the same body in \ndifferent FFIT shapes in up to 40% of cases, and that FFIT omi"
+  },
+  {
+    "page": 11,
+    "text": "IT shapes in up to 40% of cases, and that FFIT omi ts the shoulder measurements that matter for "
+  },
+  {
+    "page": 12,
+    "text": "12 \ngarment construction [24]. The definitions themselves are standardised in ISO 8559 -1, which describes the \nanthropometric measurements used for clothing, for example the hip as a horizontal girth at the greatest \nprojection of the buttocks [24], [25]. Two consequences follow for this project: a width read from a front -facing \nsilhouette is not a standard clothing measurement, and a body-shape label obtained from it should be treated as \napproximate. \n2.2 Vision–Language Representations for Fashion \nContrastive language–image pre-training (CLIP) learns a joint embedding space for images and text from a very \nlarge collection of image–text pairs and enables zero-shot transfer to new tasks by referring to visual concepts in \nnatural language [1]. Chia et al. adapted this idea to retail "
+  },
+  {
+    "page": 12,
+    "text": "uage [1]. Chia et al. adapted this idea to retail with FashionCLIP, a CLIP-like model trained on a fashion \ncatalogue, and released its weights [2], [15]. The present system uses Marqo -FashionCLIP, a fashion -domain \nmodel fine -tuned from a ViT -B-16 CLIP checkpoint using Generalised Contrastive Learning, which trains on \ncategories, styles, colours and materials in addition to product descriptions [3]. Its embeddings are used here \nfrozen, and natural -language prompts about occasion and silhouette a re embedded in the same space as the \nproduct images. This is a different checkpoint from the one described by Chia et al.; the two are related by \napproach rather than identical. \n2.3 Outfit Compatibility Learning \nHan et al. formulated outfit compatibility a s a sequence -modelling proble"
+  },
+  {
+    "page": 12,
+    "text": "fit compatibility a s a sequence -modelling problem, treating an outfit as an ordered \nsequence of items and training a bidirectional LSTM jointly with a visual–semantic embedding on a newly collected \nPolyvore dataset [4]. Vasileva et al. showed that learning image embeddings t hat respect item type improves \noutfit-compatibility prediction and fill-in-the-blank tasks over the state of the art at the time [5]. More recently, \nKalashi and Teimourpour propose a hybrid framework that introduces an “outfit token” to represent the globa l \ncontext of an outfit and addresses compatibility prediction and complementary-item retrieval together [6]. These \nworks rely on large outfit corpora with human-curated positive outfits. FitStyle AI has no such corpus; it therefore \nlearns a pairwise compatib"
+  },
+  {
+    "page": 12,
+    "text": "h corpus; it therefore \nlearns a pairwise compatibility function from catalogue-derived labels and incorporates item category explicitly, \nin the spirit of type-aware modelling [5]. \n2.4 Outfit Recommendation Systems in Practice \nTrendGen is an outfit recommendation and display system deployed on a major e-commerce platform; it extracts \nproduct attributes from images and titles and ranks products by aesthetic similarity as well as repetitiveness, so \nthat generated outfits are cohesive and varied [7]. Loom combines slot -constrained nearest-neighbour retrieval \nover FashionCLIP embeddings with a multi -objective score covering embedding similarity, colour harmony, \nformality, occasion coherence, style direction and within-outfit diversity, and introduces “vibe/anti-vibe” occasion \npriors "
+  },
+  {
+    "page": 12,
+    "text": " and introduces “vibe/anti-vibe” occasion \npriors that embed prose descripti ons of an occasion as anchor vectors in CLIP space [8]. The occasion -affinity \ncomponent of the present engine follows the same general idea: an occasion is represented by a descriptive \nprompt and by a contrasting prompt, and products are scored by their differential similarity to the two. \n2.5 Model Combination, Branch Balance and Diversity \nCheng et al. introduced Wide & Deep learning, which jointly trains a linear model and a deep network to combine \nthe memorisation of feature interactions with the generali sation of embeddings [9]. Meng et al. study branch "
+  },
+  {
+    "page": 13,
+    "text": "13 \nimbalance in dual -branch multimodal networks and show that an imbalance between branches degrades \ndownstream performance [10]; this motivated the rebalancing of the visual and metadata branches of the \ncompatibility network used here (Section 5.3). For constructing sets of results, Vijayakumar et al. show that \nstandard beam search tends to return sequences that differ only slightly, and propose Diverse Beam Search, which \noptimises a diversity -augmented objective [11]. The present engine addresses the analogous problem at outfit \nlevel with a per-item reuse cap. \n2.6 Sensitivity of Weighted-Sum Rankings \nOutfit scores in this work are weighted sums of relevance and compatibility. O’Shea et al. develop a closed -form \nmethod for computing weight stability intervals for the weighted "
+  },
+  {
+    "page": 13,
+    "text": "uting weight stability intervals for the weighted sum model, that is, the range of a criterion \nweight over which the ranking of alternatives does not change [12]. Following this principle, the sensitivity of the \nrecommended outfit set to its weights is measured and reported (Section 5.3.5) rather than assumed. \n2.7 Virtual Try-On \nImage-based virtual try-on synthesises an image of a person wearing a garment that is shown on its own, or on \nanother model, in a product photograph. Early methods  such as VITON predict a coarse try -on image from a \nperson representation and the clothing item and then refine it [18]. Progress was limited by data: public datasets \nconcentrated on upper-body garments at low resolution. Dress Code addressed this with 53, 795 image pairs at \n1024 × 768 pixels in"
+  },
+  {
+    "page": 13,
+    "text": " with 53, 795 image pairs at \n1024 × 768 pixels in three categories, upper body, lower body and dresses [26], which are the garment categories \nof a fashion shop. \nRecent work builds on diffusion models. Latent diffusion models generate images in the compressed latent space \nof an autoencoder instead of pixel space [27], which makes high -resolution synthesis affordable, and their \ninpainting variants complete a masked region of an image under a condition. IDM-VTON adds garment-encoding \nmodules to a diffusion model so that the details of the garment are preserved in unconstrained photographs [19]. \nLaDI-VTON, the model used in this work, treats try-on as latent-diffusion inpainting of the clothing region and adds \ntwo components [20]: an additional autoencoder module with learnable skip c"
+  },
+  {
+    "page": 13,
+    "text": "dditional autoencoder module with learnable skip connections, which helps to preserve \nthe characteristics of the person, and a textual -inversion component, which maps the visual features of the \ngarment into the CLIP token -embedding space as pseudo -word embeddings that condition the generation . Its \nauthors report that it outperforms competing methods on the Dress Code and VITON-HD datasets by a consistent \nmargin [20]. \nLaDI-VTON was chosen as Model 3 for three reasons. Its code and trained weights are public [28], so it can be run \nwithout a per-call quota or the availability of an external provider. Its Dress Code weights cover tops, bottoms and \ndresses, the categories on which the shop’s catalogue and Model 2 operate. And it needs only the garment image \nas a condition, so no tex"
+  },
+  {
+    "page": 13,
+    "text": " only the garment image \nas a condition, so no text description or 3D model of the products is required. Its limitations are those of the \napproach: it needs a GPU, generating one image takes minutes rather than seconds (Section 5.4), its inputs follow \nthe Dress Code convention (pose keypoints, body -part labels and a clean  garment image) that ordinary shop \nphotographs do not provide, and it renders clothing only, so shoes and accessories cannot be tried on. Table 2.3 \nplaces it among the related approaches. "
+  },
+  {
+    "page": 14,
+    "text": "14 \n2.8 Summary of Related Work and Research Gap \nTable 2.1 summarises the works discussed above. The descriptions follow each work’s published abstract; because \nthe works address different tasks and use different datasets and metrics, the comparison is qualitative. \nTable 2.1. Summary of the outfit-recommendation literature cited in this report. \nWork Task Core technique Relation to this work \nHan et al. [4], 2017 Outfit compatibility and \ngeneration \nBi-LSTM over outfit sequence with \nvisual–semantic embedding \nOutfit-level compatibility; here \npairwise scoring is used because \nno outfit corpus exists \nVasileva et al. [5], 2018 Type-aware compatibility Embeddings that respect item type Motivates category-aware \ncompatibility features \nKalashi & Teimourpour \n[6], 2025 \nCompatibility pred"
+  },
+  {
+    "page": 14,
+    "text": "lashi & Teimourpour \n[6], 2025 \nCompatibility prediction \nand complementary-item \nretrieval \n“Outfit token” for global outfit \ncontext \nStronger setting with large outfit \ndata; not reproduced here \nKoukopoulos et al. [7], \n2026 \nDeployed outfit \nrecommendation and \ndisplay \nAttribute extraction; ranking by \nsimilarity and repetitiveness \nAnalogous to the per-item reuse \ncap \nBerlia [8], 2026 Outfit recommendation FashionCLIP retrieval; multi-signal \nscore; vibe/anti-vibe priors \nSimilar occasion-prior idea; \ndifferent search method \nCheng et al. [9], 2016 App recommendation Jointly trained linear and deep \nmodels \nHere combined post hoc with a \nvalidation-tuned weight \nMeng et al. [10], 2026 Multimodal sentiment \nanalysis \nDual-branch rebalancing Supports the branch-rebalancing \nrationale"
+  },
+  {
+    "page": 14,
+    "text": "lancing Supports the branch-rebalancing \nrationale (non-fashion domain) \nVijayakumar et al. [11], \n2018 \nSequence decoding Diverse Beam Search Motivates diversity beyond plain \nbeam search \nO’Shea et al. [12], 2026 Multi-criteria decision \nanalysis \nWeight stability intervals Basis for the weight-sensitivity \nanalysis \nSource: abstracts and publication records of the cited works [4]–[13]. \n \nTable 2.2. Distinguishing properties of the outfit-recommendation approaches. \nWork Outfit-level Occasion-aware Body shape \nand size \nLearned \ncompatibility \nDiversity \ncontrol \nLive \nshop \nHan et al. [4] Yes No No Yes No No \nVasileva et al. [5] Yes No No Yes Implicit No \nKalashi & Teimourpour [6] Yes No No Yes No No \nKoukopoulos et al. [7] Yes No No Yes Yes Yes \nBerlia [8] Yes Yes No No Yes Yes \nSheik"
+  },
+  {
+    "page": 14,
+    "text": "s Yes Yes \nBerlia [8] Yes Yes No No Yes Yes \nSheikh et al. [13] (size and fit \nonly) \nNo No Size only Yes No No "
+  },
+  {
+    "page": 15,
+    "text": "15 \nWork Outfit-level Occasion-aware Body shape \nand size \nLearned \ncompatibility \nDiversity \ncontrol \nLive \nshop \nThis work Yes Yes Yes Yes (proxy \nlabels) \nYes Yes \n(project \nscale) \nSource: compiled by the authors from the full texts of the cited works [4]–[8] and [13]. No = the property is not part of the method or \nevaluation described in the work; Implicit = diverse outputs are mentioned but no mechanism controls them. \n \nIn Table 2.2, each entry was assigned from the full text of the cited work. “No” means that the property is not part \nof the method or evaluation described there, and “Implicit” means that diverse outputs are mentioned without a \nmechanism that controls them. “L ive shop” means that the system is described as operating inside a running \nonline shop. A further proper"
+  },
+  {
+    "page": 15,
+    "text": "ng inside a running \nonline shop. A further property of this work, enforcing that every recommended piece is in stock in the shopper’s \nsize, is not included in the comparison. \n \nTable 2.3. Approaches related to the body-measurement and virtual try-on components. \nApproach Task Input Technique Distinguishing property \nBlazePose [16] Pose estimation Image Lightweight network, 33 \nkeypoints \nReal-time on mobile devices; \ngives landmarks, not body \nsizes \nBMnet and BodyM \n[23] \nBody \nmeasurement \nFrontal and lateral \nsilhouettes, height, \nweight \nNetwork trained with \nadversarial augmentation \nLearned and accurate, but \nneeds training data and two \nviews \nFFIT [24] Body-shape \nclassification \nGirth measurements Rule-based, nine shapes Classification sensitive to \nmeasurement definitions \nLan"
+  },
+  {
+    "page": 15,
+    "text": "ication sensitive to \nmeasurement definitions \nLandmark-distance \nbaseline \nBody \nmeasurement \nImage and known \nheight \nLandmark distances scaled \nby height \nBaseline of this work; joint-\ncentre distances are not \nbody widths \nGünel et al. [21] Height estimation Single image Learned from pose and face \ncues \nHeight is estimated with \nlarge uncertainty, so it is \nrequested from the shopper \nhere \nQwen2.5-VL [17] Multimodal \nunderstanding \nImage and text \nprompt \nVision–language model General purpose; no metric \nguarantee; used here as a \nfallback \nSheikh et al. [13] Size and fit \nprediction \nPurchase and article \ndata \nDeep content–collaborative \nmodel \nNeeds purchase history; this \nwork needs a photograph \nand a height \nVITON [18] Virtual try-on Person and product \nimage \nCoarse-to-fine im"
+  },
+  {
+    "page": 15,
+    "text": "ry-on Person and product \nimage \nCoarse-to-fine image \ngeneration \nEarly image-based method \nwithout 3D information \nIDM-VTON [19] Virtual try-on Person and garment \nimage, text \nDiffusion with garment \nmodules \nPreserves garment detail in \nunconstrained images; \nneeds a GPU "
+  },
+  {
+    "page": 16,
+    "text": "16 \nApproach Task Input Technique Distinguishing property \nLaDI-VTON [20] Virtual try-on Person photograph, \ngarment \nphotograph, pose \nkeypoints and body-\npart labels \nLatent-diffusion inpainting \nwith textual-inversion \ngarment tokens and an \nextra autoencoder \nUsed by this work (Model 3); \nopen code and weights, \nthree garment categories; \nneeds a GPU and minutes \nper image \nSource: compiled by the authors from the cited works. \n \nThree observations frame the contribution. First, the closest systems [7], [8] are evaluated on their own catalogues \nand metrics, so absolute figures are not comparable with those reported here. Second, no cited system combines \nbody shape, size availability, occasion and season as explicit inputs, which is the setting of an online shop that \nmust recommend o"
+  },
+  {
+    "page": 16,
+    "text": "e setting of an online shop that \nmust recommend only what the shopper can actually buy in her size. Third, t he work is methodological rather \nthan algorithmic: it applies established techniques within a diagnosis-driven process and reports negative findings \nopenly. "
+  },
+  {
+    "page": 17,
+    "text": "17 \n3. Methodology \n3.1 Overall Pipeline \nA shopper’s journey through FitStyle AI has four stages. (1) The shopper uploads a full-body photograph. (2) Model \n1 estimates body measurements, a body shape and a clothing size. (3) The shopper selects an occasion, and Model \n2 returns five complete outfits for the resulting profile (size, body shape, occasion, season). (4) The shopper selects \nan outfit, may replace individual garments, and previews the selected garments on her photograph with Model 3 \n(LaDI-VTON). The interface between the models is therefore a small, discrete profile: Model 1 supplies body shape \nand size, and Model 2 consumes them together with the occasion and season (Figure 3.1, in which the shaded \nboxes are the three AI components and the white boxes are the data passed "
+  },
+  {
+    "page": 17,
+    "text": "omponents and the white boxes are the data passed between them). \n \nFigure 3.1. End-to-end flow of a shopper through FitStyle AI. \n3.2 Model 1: Body Measurement and Size Estimation \n3.2.1 Design rationale and overview \nThe module was developed from a landmark-based baseline and improved through two experimental diagnoses. \nThe first concerned hip width: the distance between the two hip l andmarks does not measure the width of the \nhips as worn, because those landmarks mark joint centres (Section 5.2). The second concerned the waist: a \nsegmentation-based search for the narrowest point of the torso is correct for fitted clothing but fails for loose or \nuntucked garments (Section 5.2). The final pipeline, called detect_size(), keeps the landmark distance only where \nthe landmarks lie on the "
+  },
+  {
+    "page": 17,
+    "text": "ark distance only where \nthe landmarks lie on the body surface (the shoulders), reads all other widths from the silhouette mask, protects \nthe waist estimate with a plausibility check, and reports how each waist value was obtained. Figure 3.2 \nsummarises the pipeline. \n"
+  },
+  {
+    "page": 18,
+    "text": "18 \n \nFigure 3.2. Pipeline of the body-measurement model. \n3.2.2 Input and scale \nThe input is a front-facing, full-body photograph and the shopper’s height H in centimetres (165 cm is used if none \nis supplied). The photograph is decoded and, because of a documented MediaPipe fault that aborts the process \nwhen the width of the segmentation mask is not a multiple of four pixels, its right edge is padded by  replicating \nthe border until the width is divisible by four; replication avoids distorting the silhouette. Pose landmarks and a \nsegmentation mask are obtained from the MediaPipe Pose Landmarker (heavy variant) [16]. The scale in \ncentimetres per pixel is s = H / d(nose, left ankle), where d is the pixel distance between landmarks 0 and 27. This \ndistance is shorter than the full stat"
+  },
+  {
+    "page": 18,
+    "text": "d 27. This \ndistance is shorter than the full stature, which excludes the crown of the head and the sole of the foot, so s, and \ntherefore every width, is slightly overestimated. \n3.2.3 Shoulder width from landmarks \nThe shoulder width is the distance between the two shoulder landmarks (11 and 12), W_shoulder = s · d(p11, \np12). Unlike the hip landmarks, the shoulder landmarks lie close to the body surface, so the landmark distance is \na reasonable width and is kept from the baseline. \n"
+  },
+  {
+    "page": 19,
+    "text": "19 \n3.2.4 Chest, hip and thigh widths from the silhouette \nLet w(y) = x_max(y) − x_min(y) be the horizontal extent of the pixels of the mask above a threshold of 0.5 in image \nrow y. Widths are read at four hei ghts: the chest at the mean shoulder height plus 0.05 of the image height, the \nhips at the mean height of the two hip landmarks (23 and 24), the thigh at the mean height of landmarks 23 and \n25 plus 0.03 of the image height, and the waist at the height found as described next. The width in centimetres is \ns · w(y). The offsets 0.05 and 0.03 were chosen empirically and have not been calibrated against measured bodies. \nIt should be noted that ISO 8559-1 defines clothing measurements such as the hip as girths measured at defined \nbody levels [24], [25]; a silhouette width at the leve"
+  },
+  {
+    "page": 19,
+    "text": " levels [24], [25]; a silhouette width at the level of the hip landmarks is therefore a proxy, not the standard \nquantity. \n3.2.5 Waist: hybrid detection with a plausibility check \nNo landmark marks the waist. Let T be the torso height, the vertical distance between the mean shoulder height \nand the mean hip height. The waist is searched in the window from 0.15 T below the shoulders to 0.10 T above \nthe hips, which excludes the neck and collar region, and the row with the smallest width w(y) is taken. Its relative \nposition in the torso is ρ = (y* − y_shoulder) / T. If 0.35 ≤ ρ ≤ 0.65, the result is accepted with the method label \n“segmentation” and confidence “high”. Otherwise the narrowest point is considered implausible, typically \nbecause of loose garments, and the waist height is set "
+  },
+  {
+    "page": 19,
+    "text": "se of loose garments, and the waist height is set to y_shoulder + 0.55 T, the width is read at that height, and \nthe result is labelled “proportional_fallback” with confidence “low”. The model therefore never returns a waist \nvalue silently: the method and the confidence accompany every result. \n3.2.6 Body-shape classification \nThe three widths shoulder S, waist W and hip H (in centimetres) are classified by rules, evaluated in the following \norder. Let D = S − H and M = min(S, H) − W. Rectangle: |D| < 10 and |W − H| < 10. Hourglass: |D| < 8 and M ≥ 15. \nApple: |W − H| < 10 and M < 15. Pear: H − S ≥ 8. Inverted triangle: S − H ≥ 8. Any other case is classified as rectangle, \nand “unknown” is returned if a width is missing. The thresholds are inch-based rules converted to centimetres (3 \nin"
+  },
+  {
+    "page": 19,
+    "text": "e inch-based rules converted to centimetres (3 \nin ≈ 8 cm, 4 in ≈ 10 cm) and are a documented starting point rather than a calibrated anatomical model. The five \nclasses are the same as those expected by the recommendation engine (Section 3.3). An earlier version of the \nclassifier returned four different classes (athletic, triangle, rectangle, hourglass) that had no counterpart for pear \nor apple in the recommendation engine, which silently removed the body-shape signal from the ranking; aligning \nthe two taxonomies corrected this interface defect. The classes are coarser than those of FFIT, which is based on \ngirths and nine shapes [24]. Because the same body can change shape class when the definition of the \nmeasurements changes [24], the label is treated as an approximate input to the "
+  },
+  {
+    "page": 19,
+    "text": "e label is treated as an approximate input to the ranking, not as a diagnosis. \n3.2.7 Size assignment \nThe size is chosen from a chart of shoulder -width limits (S up to 40 cm, M up to 44 cm, L up to 48 cm, otherwise \nXL). The chart also lists hip limits, but the function tests only the shoulder width, so hip wid th currently has no \ninfluence on the size. The server then validates the size against the hip measurement in inches, for example by \nrequiring hips above 40 inches for size XL and forcing XL when hips exceed 40 inches, and the shopper can edit \nthe size in the interface with a selector from XS to XL (Figure 4.6). The chart values are placeholders and must be \nreplaced by a brand chart before production use. "
+  },
+  {
+    "page": 20,
+    "text": "20 \n3.2.8 Outputs and fallbacks \nThe service returns the measurements, body shape, size, the waist method and  confidence, normalised vertical \npositions of the shoulder, waist and hip lines, and an annotated copy of the photograph in which the skeleton and \nthree horizontal reference lines labelled with their values in centimetres are drawn. If the service does not answer \nwithin 15 seconds or fails, the server asks a vision–language model (Qwen2.5-VL [17]) for the same measurements \nunder a prompt that states the sizing rules,. \n3.3 Model 2: Outfit Recommendation Engine \nFigure 3.3 summarises the engine: steps 1 to 6 are run once offline, and steps 7 to 9 are run on every shopper \nrequest. \n \nFigure 3.3. Pipeline of the outfit recommendation engine (A: offline preparation, B: online use)"
+  },
+  {
+    "page": 20,
+    "text": "ion engine (A: offline preparation, B: online use).  \n3.3.1 Problem formulation \nLet C be a catalogue of products, each with a garment cat egory (Dress, Top, Bottom, Outerwear, Shoes or \nAccessory), a colour, a usage label, a season, the set of sizes in which it is stocked, and an image. A profile is a \ntuple (s, b, o, t, y) of clothing size, body shape, occasion, season and style. The task is to return K = 5 outfits, each \n"
+  },
+  {
+    "page": 21,
+    "text": "21 \na set of products from C that forms a complete look (for example a dress with shoes and an accessory, or a top \nwith a bottom), such that every product is available in size s, the outfits are well matched to (b, o, t, y), the \ngarments within each outfit are mutually compatible, and the five outfits differ from one another. \n3.3.2 Item representation \nEach product is represented by a frozen Marqo -FashionCLIP embedding [3]. An image embedding v and a text \nembedding of the product description are computed, and the item embedding e is a weighted combination of the \ntwo (weights 0.7 for the image and 0.3 for the text). The image embedding is also kept separately and is the one \nused for body-shape scoring. Text prompts (occasion, silhouet te, style) are embedded with the same model, so \n"
+  },
+  {
+    "page": 21,
+    "text": " te, style) are embedded with the same model, so \nthat cosine similarity between a product and a prompt is meaningful. The encoder is never fine-tuned. \n3.3.3 Eligibility filtering \nProducts are first filtered so that only items stocked in the shopper’s size r emain. Season and usage are then \nmatched to the profile. Because the dataset’s usage field has no values for “wedding” or “interview”, these \noccasions are mapped to the nearest usage values (formal and party for wedding; formal and smart casual for \ninterview). Size is a hard constraint that is never relaxed. When strict filtering leaves too few candidates, the filter \nis relaxed in two stages, first ignoring season and then broadening usage, as described in Section 3.3.8. \n3.3.4 Profile relevance \nEach eligible product i receives "
+  },
+  {
+    "page": 21,
+    "text": "ofile relevance \nEach eligible product i receives three relevance signals, which are averaged with equal weights into a relevance \nscore r(i) = (s_style(i) + s_body(i) + s_occ(i)) / 3. \n• Style: s_style(i) is the cosine similarity between the item embedding and the embedding of a prompt o f \nthe form “A {style} {season} outfit”. \n• Body shape: s_body(i) = max over preferred prompts of cos(v_i, p) − max over avoided prompts of cos(v_i, \nq), computed on the image embedding. The preferred and avoided silhouette prompts for each of the five \nbody shapes are listed in Appendix E. \n• Occasion: s_occ(i) = cos(e_i, g) − λ · max(0, cos(e_i, g′) − cos(e_i, g)), where g and g′ are the embeddings \nof a descriptive “vibe” prompt and a contrasting “anti -vibe” prompt for the occasion, and λ = 2.0. A \npr"
+  },
+  {
+    "page": 21,
+    "text": "-vibe” prompt for the occasion, and λ = 2.0. A \nproduct is there fore penalised only when it is closer to the contrasting prompt than to the descriptive \none. \nFor each garment category the best-scoring products form a candidate pool (Appendix B). \n3.3.5 Pairwise compatibility learning \nCompatibility between two products a and b is learned from pair features consisting of the absolute difference \n|e_a − e_b|, the element-wise product e_a ⊙ e_b, a six-dimensional category indicator for the pair, and a scalar \ncolour-relationship score. Labels are catalogue-derived proxy labels, because no human-curated outfit corpus was \navailable (Section 1.7). Pairs were built at product level so that no product appears in more than one of the \ntraining, validation and test splits (70%, 15%, 15%). \nTwo mo"
+  },
+  {
+    "page": 21,
+    "text": "alidation and test splits (70%, 15%, 15%). \nTwo models are trained on these features. CompatibilityNet v2 is a dual-path network. A visual branch (reduced \nin size, with stronger dropout) processes the embedding features; a metadata branch (widened, with weaker \ndropout) processes category and colour; and a fusion head receives both learned represe ntations together with "
+  },
+  {
+    "page": 22,
+    "text": "22 \nthe raw metadata vector through a skip connection. The revision from v1 was motivated by an ablation showing \nthat the original visual branch (large relative to the number of training pairs) dominated a weaker metadata \nbranch, the situation described as branch imbalance in [10]. Training uses the Adam optimiser with early stopping \non the validation loss (settings in Appendix B). A logistic-regression model is trained on the same features. The \ntwo are combined post hoc as p = w · p_net + (1 − w) · p_lin, where w is chosen from a grid between 0 and 1 to \nmaximise accuracy on the validation split only, and the chosen value is then applied unchanged to the test split. \nThis is a simplification of the jointly trained wide -and-deep design of [9 ], which keeps the network architecture \nfi"
+  },
+  {
+    "page": 22,
+    "text": " of [9 ], which keeps the network architecture \nfixed while allowing the blend to shift towards the network if more labelled data becomes available. \n3.3.6 Outfit construction, scoring and selection \nOutfits are assembled from category templates (such as Dress, or Top with Bottom) extended with optional slots \n(such as Shoes and Accessory). Exhaustive enumeration of the Cartesian product of the candidate pools reaches \ntens of thousands of combinations for a single profile, so a beam search is used instead: at each step one category \nis added to every partial outfit and only the best 30 partial outfits, ranked by the same outfit-scoring function, are \nretained. The score of an outfit is final = 0.6 · compatibility + 0.4 · relevance − 0.1 · colour penalty, where the \ncompatibility term pool"
+  },
+  {
+    "page": 22,
+    "text": "colour penalty, where the \ncompatibility term pools the learned pairwise compatibility and occasion -consistency statistics of the outfit, \nrelevance is the mean r(i) of its products, and the colour penalty applies to clashing non -neutral colours. Two \nsafeguards follow. A compatibility floor removes any outfit whose weakest pairwise link falls below 0.55, so that \none poorly matched pair cannot be hidden by well -matched ones. A diversity selection then walks the ranked \noutfits and accepts an outfit only if it is sufficiently dissimilar from t hose already chosen and does not use any \nproduct that already appears in two accepted outfits (reuse cap of 2). The cap plays a role analogous to the \nrepetition-aware ranking of [7] and to diversity-promoting decoding [11]. \n3.3.7 Explanation ge"
+  },
+  {
+    "page": 22,
+    "text": "ity-promoting decoding [11]. \n3.3.7 Explanation generation \nEach outfit is accompanied by a short justification. A language model is given only a structured evidence record \n(garment categories, colours, colour relationship, occasion, season, size, and whether the outfit was chosen by \nthe model or customised by the sho pper) and is instructed not to invent fabric, fit or price, not to quote raw \nscores, and not to use certainty language. If the model is unavailable, a deterministic template built from the same \nevidence is used. The ranking itself never depends on the language model. \n3.3.8 Offline pre-computation of recommendations \nBecause the neural pipeline requires a GPU and the application should stay within free -tier limits, the engine is \nrun offline for every combination of 4 si"
+  },
+  {
+    "page": 22,
+    "text": "gine is \nrun offline for every combination of 4 sizes, 5 body shapes, 5 occasions and 4 seasons (400 profiles). For each \nprofile a three -level fallback is applied: level 0 uses the strict filter; level 1 ignores season; level 2 additionally \nbroadens the usage filter. Outfits found at later levels are added only if they do not duplicate earlie r ones, until \nfive outfits are obtained. For each profile the export stores the outfits, their deterministic explanations and \nevidence records, and a ranked candidate pool for each garment category. Before the export, the sizes held in the \nnotebook are overwritten by the sizes actually stored in the shop’s database, so that every recommended product \nis genuinely available. "
+  },
+  {
+    "page": 23,
+    "text": "23 \n3.4 Model 3: Virtual Try-On \nModel 3 renders the garments of the selected outfit on the shopper’s own photograph. It is not trained in th is \nproject: the pre-trained LaDI-VTON model with Dress Code weights [20], [26] is used as it is. The contribution lies \nin the pipeline around it, which turns ordinary shop and shopper photographs into the input that the model \nexpects, applies the model to complete outfits, restores the parts of the person that must not change, and offers \nthe model to the website as a service (Figure 3.4). \n3.4.1 Design rationale and overview \nLaDI-VTON expects its inputs in the Dress Code format: a 768 × 1024 photograph of th e person, a 768 × 1024 \nphotograph of the garment on a white background, a garment mask, a map of body -part labels and 18 pose \nkeypoints "
+  },
+  {
+    "page": 23,
+    "text": "a map of body -part labels and 18 pose \nkeypoints in a 384 × 512 coordinate space. A shop catalogue provides none of these, and its garment photographs \noften show the gar ment on a mannequin or on a person. The pipeline therefore adds three stages around the \nmodel: garment cleaning (Section 3.4.2), person preparation (Section 3.4.3) and identity restoration after \ngeneration (Section 3.4.5). The model itself is run through t he inference script of its official repository [28], with \nthe Stable Diffusion 2 inpainting weights [27] loaded from a mirror on Hugging Face, because the original \nrepository of those weights is no longer available (Appendix G). \n \nFigure 3.4. Pipeline of the virtual try-on model (Model 3) and the stages added around LaDI-VTON. \n3.4.2 Garment cleaning \nThe garment "
+  },
+  {
+    "page": 23,
+    "text": "d LaDI-VTON. \n3.4.2 Garment cleaning \nThe garment photograph is first analysed by a human-parsing model (segformer_b2_clothes), which assigns every \npixel to a class such as upper clothes, skirt, pants, dress or belt. Only the pixels that belong to the garment of the \n"
+  },
+  {
+    "page": 24,
+    "text": "24 \nrequested category are kept; the mannequin, the person who wears the garment and the background are painted \nwhite. If the parser cannot find the garment, a background-removal mask (rembg) is used instead and a warning \nis printed. Transparent images are flattened onto white, and very small photographs, such as the 60 × 80 pixel \nimages of the public catalogue, are enlarged before segmentation and flagged as low resolution, because the \nresult will be blurred. \nThe garment type is detected from the parser’s pixel counts (upper_body, lower_body or dresses); an ambiguous \nphotograph, for example one that shows a full outfit, produces a warning. The website can also pass the category \nof the product explicitly. The catalogue categories are mapped to the three categories of the model: tops"
+  },
+  {
+    "page": 24,
+    "text": " mapped to the three categories of the model: tops, shirts, \njackets, sweaters and coats to upper_body; skirts, trousers, jeans and shorts to lower_body; and dresses to \ndresses. \n3.4.3 Person preparation \nThe shopper’s photograph is fitted into a 768 × 1024 canvas with white borders so that its proportions are kept. \nPose keypoints are obtained with the MediaPipe pose landmarker [22] and converted to the 18 -keypoint layout \nused by Dress Code, with the neck placed at the m idpoint of the shoulders; landmarks whose visibility is below \n0.3 are discarded. The body -part label map is produced by the same human -parsing model, and its labels are \nmerged into the Dress Code identifiers: for the lower_body category, skirt pixels are m erged into pants, and for \nthe dresses category, upper-clot"
+  },
+  {
+    "page": 24,
+    "text": "o pants, and for \nthe dresses category, upper-clothes, skirt, pants and belt pixels are merged into dress. The test photograph was a \nfront-facing, full-body photograph of a person standing against a plain wall with the shoes visible. \n3.4.4 Generation and layering of outfits \nEach garment is processed by the inference script of LaDI-VTON for its category, in the unpaired setting in which \nthe garment is not the one that the person is wearing, with mixed (fp16) precision and a batch size of one. The \nmodel changes one clothing region at a time, so an outfit made of a top and a bottom cannot be generated in a \nsingle pass. The garments are therefore processed in sequence, the bottom first and the top second, and the result \nof the first step becomes the person image of the second step, so t"
+  },
+  {
+    "page": 24,
+    "text": " becomes the person image of the second step, so that the top is layered over the bottom. A dress \ncovers both regions: when a dress is present the other garments are ignored and a single step is run. Shoes, bags \nand other accessories are not supported by the model; they ar e ignored with a warning, and the interface lists \nthem as part of the outfit without rendering them. \n3.4.5 Identity restoration and delivery \nDiffusion inpainting can alter regions that should remain unchanged. After each step, the pixels that the label map \nassigns to the hat, hair, sunglasses, face and shoes are copied back from the prepared original photograph through \na mask that is blurred slightly (a Gaussian blur of radius 2) to avoid visible seams. The shopper therefore remains \nrecognisable and the footwear "
+  },
+  {
+    "page": 24,
+    "text": " therefore remains \nrecognisable and the footwear is not regenerated. Because a generation takes minutes, the pipeline is wrapped \nin a small web service with a job queue, which the website submits to and polls (Section 4.5). \n3.5 Evaluation Methodology \nThe compatibility models are evaluated on held -out product-level test pairs with accuracy, precision, recall, F1, \nROC-AUC, PR-AUC, Spearman correlation and mean absolute error. They are compared with three non -learned \nbaselines (a proxy compatibility formula, raw embedding cosine similarity and a category-only shortcut) and with \na feature ablation that isolates the visual signal, the metadata signal and their combination. Outfit-set diversity is "
+  },
+  {
+    "page": 25,
+    "text": "25 \nmeasured by the average pairwise outfit similarity and the number of unique items in the top five outfits befo re \nand after the reuse cap. The integrated pipeline is evaluated end to end on several profiles. Ranking stability is \nmeasured as the overlap between the top -five outfit sets obtained under different relevance/compatibility \nweightings, in the spirit of weight-stability analysis [12]. The results are reported in Section 5. \nThe body-measurement model was examined through case studies in a notebook: each step of the pipeline was \nrun on test photographs of people wearing different garments, the intermediate val ues (landmark distances, \nsilhouette widths, the position of the narrowest point of the torso) were inspected, and the behaviour of the \nbaseline and of the corrected"
+  },
+  {
+    "page": 25,
+    "text": "he behaviour of the \nbaseline and of the corrected method was compared (Section 5.2). No tape-measure ground truth was collected, \nso the case studies diagnose behaviour but do not estimate accuracy. \n3.6 Development Approach, Tools and Technology Choices \nThe platform was developed iteratively by a team of four students, with the source code kept under version \ncontrol on GitHub. The AI components were prototyped and evaluated in notebooks before being integrated, and \neach integration step was checked by compiling the front end and server with the TypeScript compiler. Table 3.1 \nlists the main tools and the reasons for choosing them. The dominant constraint was cost: every managed service \nwas selected for a free tier that is sufficient for a project of this size. \nTable 3.1. Tools and t"
+  },
+  {
+    "page": 25,
+    "text": "or a project of this size. \nTable 3.1. Tools and technology choices. \nConcern Choice Reason \nFront end React with Vite and Tailwind CSS Component-based interface and fast development cycle \nBack end Node.js with Express and TypeScript One language across client and server; simple REST APIs \nAuthentication Amazon Cognito Managed user pool and signed tokens that the server \ncan verify; no password handling in the application \nDatabase Amazon DynamoDB Managed key-value store with a free tier; low \noperational effort \nInfrastructure Terraform Cloud resources are described in code and can be \nrecreated \nMedia storage Supabase Storage Free public object storage for images and product \nthumbnails \nBody measurement Python with MediaPipe Pose Landmarker, \nOpenCV, NumPy and Flask \nOff-the-shelf pose"
+  },
+  {
+    "page": 25,
+    "text": "rker, \nOpenCV, NumPy and Flask \nOff-the-shelf pose and segmentation model [22] that \nruns on a CPU and needs no training data; a small local \nservice keeps it separate from the Node.js server \nRecommendation model Python notebook on a free GPU runtime, \nfrozen fashion CLIP embeddings \nNeural inference is needed only offline; the web server \nthen performs a file look-up (Section 3.3.8) \nVirtual try-on LaDI-VTON (PyTorch, diffusers) with Dress \nCode weights on a free Colab T4 GPU; \nFastAPI job service; SegFormer parsing \nand MediaPipe keypoints \nOpen code and weights, three garment categories and \nno per-call quota; the GPU is needed only for this model, \nso it is run as a separate service (Section 4.5) \nExplanations Large language model API (free tier) Natural-language justification without"
+  },
+  {
+    "page": 25,
+    "text": "(free tier) Natural-language justification without training a text \nmodel; a template is used as fallback \n "
+  },
+  {
+    "page": 26,
+    "text": "26 \n4. Design and Implementation \n4.1 Architecture Overview \nFitStyle AI follows a three -tier design. A React single -page application provides the shopper interface; a \nNode.js/Express server provides authenticated APIs and orchestrates the AI components; and managed cloud \nservices store identity and data; the client, the server and the measurement service ru n locally, whereas the \ndatabase, authentication, image storage, language model and try-on service are cloud or external services. Figure \n4.1 shows how the components are connected and where they run, and Table 4.1 summarises the layers. \n \nFigure 4.1. System architecture of FitStyle AI. \nTable 4.1. Layers of the FitStyle AI implementation. \nLayer Technology Role \nClient React, Vite, Tailwind CSS Photo upload, measurement review, "
+  },
+  {
+    "page": 26,
+    "text": "e, Tailwind CSS Photo upload, measurement review, outfit \nselection, virtual try-on, cart and checkout \n"
+  },
+  {
+    "page": 27,
+    "text": "27 \nLayer Technology Role \nServer Node.js, Express Authenticated REST APIs; joins recommendations \nwith the catalogue; calls external AI services \nBody measurement Python (Flask), MediaPipe Pose \nLandmarker, OpenCV \nLocal micro-service that returns widths, body \nshape, size and an annotated photograph \nVirtual try-on Python, LaDI-VTON, FastAPI job queue, \nGoogle Colab T4 GPU, temporary public \ntunnel \nGPU service that accepts the shopper’s photograph \nand garment image URLs and returns the try-on \nimage after a few minutes \nIdentity Amazon Cognito Sign-up, sign-in and token-based authentication of \nevery API request \nData Amazon DynamoDB (Users, Products, \nOrders, Measurements) \nCatalogue, profiles, carts, orders and \nmeasurements \nInfrastructure as code Terraform Reproducible provisioning"
+  },
+  {
+    "page": 27,
+    "text": "ucture as code Terraform Reproducible provisioning of cloud resources \nMedia Supabase Storage (public bucket) Product thumbnails and uploaded images \nRecommendation index JSON file loaded at server start Pre-computed outfits and candidate pools for the \n400 profiles \nExplanations Large language model API Natural-language justification of the selected outfit \n \n4.2 Data Design \nThe product catalogue is stored in DynamoDB and loaded into server memory at start -up, so that price, stock, \navailable sizes and colour are always taken from the database rather than from the recommendation index. Each \nproduct carries a rich six-value garment category that the migration script stored alongside the coarser four-value \ncategory used by older parts of the interface. Measurements accepted by the shopp"
+  },
+  {
+    "page": 27,
+    "text": " the interface. Measurements accepted by the shopper are stored in the \nMeasurements table. The ca rt is stored with the user’s record and is emptied by the server after a successful \npayment. The number of DynamoDB tables and their provisioned capacities were deliberately left unchanged, \nbecause the existing four tables already use the available free-tier read capacity; this constraint is the main reason \nrecommendations are pre-computed instead of stored in a new table. \n4.3 Recommendation Service \nThe recommendation service is a server module that exposes three authenticated endpoints (Appendix A). The \nindex file maps a profile key (size, body shape, occasion, season) to up to five outfits, each with its product \nidentifiers, garment categories, score, deterministic explanation and ev"
+  },
+  {
+    "page": 27,
+    "text": "ategories, score, deterministic explanation and evidence, together with ranked candidate \npools per category. When a request arrives, the service (i) normalises the profile (mapping XS to S and XXL to XL \nbecause the catalogue stocks only S to XL, and defaulting the season from the current date), (ii) looks up the \nprofile, (iii) joins each identifier with the live catalogue, (iv)  discards pieces that are out of stock or no longer \noffered in the shopper’s size, and (v) returns each piece displayed in the shopper’s size. If the index is missing or \nthe call fails, the interface silently falls back to the earlier collection list, so t he recommendation layer can be \nabsent without breaking the application. "
+  },
+  {
+    "page": 28,
+    "text": "28 \nThe explanation endpoint accepts the identifiers of the pieces currently selected rather than an outfit identifier, \nso that the justification always describes exactly what the shopper has chosen. Requests are limited by a 12 -\nsecond timeout, results are cached in memory by profile and selection, and the deterministic template is returned \nif the language model fails. \n4.4 User Interface \nIn the try-on step the left panel shows the recommended outfit, with the outfit title, its total price and, for each \npiece, the image, name, price, colour and size. A control opens all five outfits, from which the shopper selects one; \nthe selection panel on the right then shows its pieces. Selecting a piece opens a dialog in the centre of the screen \nlisting the other suitable products of the same "
+  },
+  {
+    "page": 28,
+    "text": " \nlisting the other suitable products of the same garment category in the shopper’s size; choosing one replaces the \nprevious piece. Removing a piece from the selection panel un-selects it but leaves it in the outfit on the left, where \nit can be re-selected. A card below the preview explains why the outfit was chosen and is regenerated whenever \nthe selection changes; it is labelled “Customised” when the outfit differs from the model’s pick. Selected pieces \nare added to the cart in the shopper’s size (Figure 4.2). \n \nFigure 4.2. Try-on step: the recommended outfit (left), the preview of the shopper (centre) and the shopper’s selection \n(right). \n"
+  },
+  {
+    "page": 29,
+    "text": "29 \nThe left panel and the selection panel are shown in more detail in Figure 4.3:  (a) the recommended outfit with \neach piece grouped by category, (b) the list of all five recommended outfits and (c) the shopper’s selection with \nits total and the Add to Cart and Continue buttons. \n \nFigure 4.3. Panels of the try-on step: (a) recommended outfit, (b) all five outfits and (c) shopper’s selection. \nSelecting a piece opens a dialog that lists the other suitable products of the same category in the shopper’s size \n(Figure 4.4). The explanation card (Figure 4.5) is regenerated whenever the selection changes. \n"
+  },
+  {
+    "page": 30,
+    "text": "30 \n \nFigure 4.4. Dialog listing the tops that suit the shopper’s profile; choosing one replaces the current top.  \n \nFigure 4.5. Explanation card (“Why this outfit”) shown below the preview.  \n4.5 Integration of the AI Models \nBody-measurement service. Model 1 is implemented as a Python micro -service (Flask with cross -origin access \nenabled) that listens on port 5001 and exposes two endpoints: a POST endpoint that accepts the photograph as a \nbase64 string and the height, and a health endpoint. The servic e writes the image to a temporary file, deletes it \nafter processing, and answers with HTTP 422 if no person is detected and HTTP 500 for other failures. It loads the \nMediaPipe Pose Landmarker heavy model (about 30 MB), which it downloads on first start, wi th segmentation \noutput ena"
+  },
+  {
+    "page": 30,
+    "text": "ads on first start, wi th segmentation \noutput enabled. The functions of the notebook (waist detection, shape classification, size mapping and the main \n"
+  },
+  {
+    "page": 31,
+    "text": "31 \ndetect_size routine) were moved unchanged into the service file, with the notebook-only display code removed, \nso that the experiments in Section 5.2 describe the deployed behaviour. \nThe Express server orchestrates the call in its body-analysis endpoint, applies the validation rules and the fallbacks \nof Section 3.2.8, and stores the accepted measurements with the user’s profile. In the browser, the measurements \nare shown as editable cards beside the photograph, and the normalised line positions returned by the service \nallow the interface to draw its own live reference lines whose labels follow the values the shopper edits (Figure \n4.6). \n \nFigure 4.6. Body-measurement step: extracted metrics with an editable size selector (left) and the annotated photograph \n(right). \nVirtual try-o"
+  },
+  {
+    "page": 31,
+    "text": " the annotated photograph \n(right). \nVirtual try-on service. Model 3 needs a GPU, which neither the team’s machines nor the free tiers of the cloud \nservices provide, so it runs as a separate service in a notebook on a free Colab T4 GPU. The notebook starts a \nFastAPI application on port 8000 and exposes it through a temporary public address created with cloudflared; the \naddress and an API key are printed when the cell is run and change each time. A POST request to /tryon uploads \nthe shopper’s photograph (limit 10 MB) together with a JSON list of one to three garments, each with the URL of \nits product image and, optionally, its category, and answers at once with a job identifier. A single worker thread \ntakes the jobs from a queue and runs the pipeline of Section 3.4, because one GPU ca"
+  },
+  {
+    "page": 31,
+    "text": "ns the pipeline of Section 3.4, because one GPU can serve only one generation \nat a time. The site polls GET /jobs/{id} for the status (queued, running, done or error) and, when the jo b is done, \ndownloads the PNG image from GET /results/{id}. The API key is held by the Express server, not by the browser, \n"
+  },
+  {
+    "page": 32,
+    "text": "32 \nand the uploaded photograph is deleted as soon as the job finishes; results are deleted after one hour (Appendix \nK). \nIn the browser, the shopper presses Generate Look. The centre panel then shows the message “Generating try -\non… (may take a few minutes)” over the photograph, and it replaces the photograph with the generated image, \nlabelled “Virtual Fitting Active”, when the job is done (Figures 5.5 and H.11). \nThe interface from Model 1 to Model 2 consists of the body-shape label and the clothing size. The interface from \nModel 2 to Model 3 is the image of the main garment of the selected outfit (the dress if present, otherwise the \ntop). The service itself accepts up to three garments per job and can layer a top over a bottom (Section 3.4.4). \n4.6 Security and Cost Considerations "
+  },
+  {
+    "page": 32,
+    "text": "ion 3.4.4). \n4.6 Security and Cost Considerations \nEvery recommendation endpoint requires a valid Cognito token, and the cart and checkout endpoints additionally \nverify that the token belongs to the owner of the cart. The language-model key is never exposed to the client, and \nall calls to external services are made by the server. The recommendation design avoids paid components: \ninference runs once offline on a free n otebook runtime, thumbnails use free object storage, and the server \nperforms only a file look-up and a join per request. \n4.7 Implementation Challenges \nTable 4.2. Integration challenges and the measures taken. \nChallenge Cause Measure \nRecommended products in sizes the \nshop does not stock \nThe notebook and the database had \ngenerated different random size lists \nOverwri"
+  },
+  {
+    "page": 32,
+    "text": "ad \ngenerated different random size lists \nOverwrite the notebook sizes with those \nexported from the database before \ncomputing the index \nBlank product images The migrated catalogue contains no image \nlinks \nUpload thumbnails for the \nrecommended products to object \nstorage and derive their URL from the \nproduct identifier \nFewer than five outfits for narrow \nprofiles \nStrict filtering on size, season and usage \nleaves few candidates; wedding and interview \nmatch no usage values \nThree-level fallback with a usage \nmapping; size is never relaxed \nMeasurement service aborted on \nsome photographs \nMediaPipe aborts the process when the mask \nwidth is not a multiple of four pixels \nPad the right edge of the image by \nreplicating the border \nBody-shape class unknown to the \nrecommendation engi"
+  },
+  {
+    "page": 32,
+    "text": "dy-shape class unknown to the \nrecommendation engine \nThe measurement module returned four \nclasses and the engine expects five \nAlign the taxonomy and the thresholds \nShopper size XS The catalogue stocks only S to XL Map XS to S and tell the shopper that \nthe closest size is shown \nDresses and outerwear collapsed \ninto “top” \nThe interface used a four-value category Carry the six-value garment category \nthrough the API and the interface \nCatalogue photographs unsuitable \nas try-on input \nMany product photographs show the garment \non a mannequin or a person, and the public \ncatalogue images are only 60 × 80 pixels \nGarment cleaning with human parsing \nand a white background; enlargement \nand a low-resolution warning (Section \n3.4.2) "
+  },
+  {
+    "page": 33,
+    "text": "33 \nChallenge Cause Measure \nModel weights no longer available The Stable Diffusion 2 inpainting weights \nnamed in the model’s code were removed \nfrom their original repository \nPoint the model code to a mirror of the \nsame weights (Appendix G) \nLibrary conflicts The model needs older versions of PyTorch, \ndiffusers and transformers than the notebook \nruntime provides \nA separate Python 3.10 environment \nwith pinned versions (Appendix G) \nGeneration takes minutes on an \nexternal GPU \nDiffusion inference on a T4 GPU is slow, and a \nnotebook runtime disconnects and gives a \ntemporary public address \nJob queue with polling; photographs are \ndeleted after use; the set-up is \ndocumented as suitable for \ndevelopment and demonstrations \n(Appendix K) \n \n4.8 Platform Features \nThe application cover"
+  },
+  {
+    "page": 33,
+    "text": "K) \n \n4.8 Platform Features \nThe application covers the complete journey of  a shopper and the management of the shop. Table 4.3 lists its \nfeatures, and the corresponding screens are reproduced in Appendix H and in Section 4.4. Checkout is simulated \nin test mode, so no real money is taken, and a pay-in-store option reserves the order for payment at pickup. Store-\nowner accounts are created by invitation only. Cart and checkout requests are authenticated and restricted to the \nowner of the cart (Section 4.6). \nTable 4.3. Features of the application. \nArea Feature Screen \nAccess Landing page that introduces the application and leads to sign-in Fig. H.1 \nAccess Sign-up and sign-in for shoppers with e-mail and password or with Google; separate sign-in for \nstore owners; store-owner sign-up b"
+  },
+  {
+    "page": 33,
+    "text": "e sign-in for \nstore owners; store-owner sign-up by invitation only \nFig. H.2 \nShopper Step 1: upload a full-body photograph and choose an occasion (Wedding, Formal, Casual or \nParty) \nFig. H.3 \nShopper Step 2: review the measurements, body shape and size inferred from the photograph; edit \nthem manually, reset them, choose another size or upload another photograph \nFig. 4.6 \nShopper Step 3: five recommended outfits with match score and total price; view all five and choose \none \nFigs. 4.2, 4.3 \nShopper Swap any piece for another suitable product of the same category in the shopper’s size; select \nor deselect pieces \nFig. 4.4 \nShopper Explanation of the selected outfit, generated by a language model and refreshed when the \nselection changes \nFig. 4.5 \nShopper Virtual try-on preview of the "
+  },
+  {
+    "page": 33,
+    "text": " \nFig. 4.5 \nShopper Virtual try-on preview of the selected garment on the shopper’s photograph (Generate Look) Figs. 4.2, 5.5, \nH.11 \nShopper Add the selection to the cart; change quantities, remove items, enter a promo code and \nchoose to buy online or pay offline \nFig. H.5 \nShopper Step 4: create the order from the chosen pieces and export a PDF summary Fig. H.4 \nShopper Step 5: payment in a sandbox gateway with a test card (no real currency is debited) Fig. H.6 "
+  },
+  {
+    "page": 34,
+    "text": "34 \nArea Feature Screen \nShopper Step 6: order confirmation with delivery tracking and a downloadable PDF summary Fig. H.7 \nShopper Pay offline: the order is reserved, and the PDF summary carries a QR code and the shop \nlocation for payment at pickup \nFig. H.8 \nStore owner Inventory dashboard: catalogue summary, search, filters by category, occasion and size, \nsorting, stock switch, edit and delete, add garment and export to CSV \nFig. H.9 \nStore owner Sales and analytics dashboard: revenue, sales by occasion, turnover by category, top-selling \nproducts and recent customer orders \nFig. H.10 \nSource: the implemented application; the screens are shown in Appendix H and in Figures 4.2 to 4.6. "
+  },
+  {
+    "page": 35,
+    "text": "35 \n5. Results and Evaluation \n5.1 Evaluation Protocol and Data \nAll recommendation experiments use the catalogue of 11,513 products described in Appendix D, drawn from a \npublic fashion-product dataset [14]. Products were split at the product level (70% training, 15% validatio n, 15% \ntest), so that no product appears in more than one split, and the compatibility models were trained on 948 labelled \nproduct pairs. Compatibility labels are proxies derived from catalogue attributes, not human judgements, so every \naccuracy figure below measures agreement with that proxy. All figures come from the project notebook (version \nv20, fixed random seed) and refer to the held-out test split unless stated otherwise. \n5.2 Body-Measurement and Size Model (Model 1) \nExperimental setting. The module was"
+  },
+  {
+    "page": 35,
+    "text": "el (Model 1) \nExperimental setting. The module was examined in a notebook on a small number of test photographs of people \nwearing different garments. No tape-measure ground truth was collected. The results in this section are therefore \ncase studies that diagnose the behaviour of the method; they are no t accuracy estimates. Figure 4.6 shows the \noutput of the module in the application. \nTable 5.1. Hip-width estimate for one test photograph: landmark baseline and segmentation -based method. \nQuantity Landmark baseline Segmentation-based method \nWhat is measured Distance between the two hip joint centres Width of the silhouette at hip height \nHip estimate (cm) 19.5 61.9 \nShoulder width (cm) about 38 about 38 \nSource: FitVerse_Detect_Size_Module notebook, one test photograph. The shoulder w"
+  },
+  {
+    "page": 35,
+    "text": "dule notebook, one test photograph. The shoulder width is measured in the same way by both methods. \nThe landmark baseline gave a hip estimate of about half the shoulder width. The cause is that it measures a \ndifferent quantity: the hip landmarks are internal joint centres, whose separation is smaller than the width of the \nbody at the hips. Reading the mask at hip height gave about three times that value. The new value must be \ninterpreted with care: it is a straight -line silhouette width, not a circumference, and it is large relative to the \nshoulder width, because the silhouette at hip height can include arms or hands resting at the sides, loose clothing \nand any overestimate of the scale. Without tape -measure ground truth the correction is plausible but not \nvalidated. \nTable 5.2. B"
+  },
+  {
+    "page": 35,
+    "text": "ion is plausible but not \nvalidated. \nTable 5.2. Behaviour of the hybrid waist detection across garment types. \nGarment scenario Relative position of the \nnarrowest point \nFallback triggered Observation \nLoose cardigan with scarf or hijab about 0.15 Yes False narrow point at the neck and scarf; a \nwrong answer with apparent confidence \nFitted blouse worn untucked, with \ntrousers \nabout 0.15 Yes No local minimum: the width increases \nsteadily because the blouse drapes past the \nwaist \nFitted, tucked-in clothing not yet tested expected: no Planned; the body contour should be visible \nto the mask \nSource: notebook test photographs. Positions are fractions of the torso height; the plausible range used by the method is 0.35 to 0.65. "
+  },
+  {
+    "page": 36,
+    "text": "36 \nTwo distinct failure modes were found. In the first, the segmentation produces a false narrow point; in the second, \nit produces no narrow point at all. Both fall outside the plausible range of the torso height and are caught by the \nplausibility check, which then applies the proportional estimate and reports low confidence. The check protects \nagainst silent errors but does not recover the true waist width in these cases. The third scenario, in which the \ncontour of the body is directly visible, has not yet been tested. \n5.3 Outfit Recommendation Engine (Model 2) \n5.3.1 Compatibility models \nTable 5.3 reports the held-out performance of the compatibility models. The rebalanced dual-path network (v2) \nimproved on its first version and on a category -only shortcut, but the linear model "
+  },
+  {
+    "page": 36,
+    "text": "n a category -only shortcut, but the linear model trained on the same features \nwas better still. Figure 5.1 shows that the metadata signal alone is much stronger than the visual signal alone, and \nthat adding the visual signal to the metadata gave only a small gain. \nTable 5.3. Held-out accuracy of the compatibility models. \nModel Accuracy F1 ROC-AUC \nCategory-only shortcut 0.536 – – \nCompatibilityNet v1 0.646 – – \nCompatibilityNet v2 0.789 0.802 0.899 \nLinear model 0.932 0.934 0.980 \nSource: project notebook (version v20), held-out test split of 237 labelled pairs; the values for the first network version and the category-\nonly shortcut are taken from the project’s earlier report. A dash means that the value was not reported. \n \nFigure 5.1. Feature ablation: test accuracy with visual fea"
+  },
+  {
+    "page": 36,
+    "text": "1. Feature ablation: test accuracy with visual features only, metadata only, both (linear model) and with the \nCompatibilityNet v2. \n5.3.2 Ensemble with a validation-selected weight \nA logistic-regression model trained on the same features was blended with the network as score = w · network + \n(1 − w) · linear, with w chosen on the validation split only. Validation accuracy fell as more weight was given to \nthe network (Figure 5.2), and the selected weight was 0, so on this data the ensemble reduces to the linear model. \n"
+  },
+  {
+    "page": 37,
+    "text": "37 \nThe test accuracy of 0.932 is therefore the linear model’s own performance and should not be attributed to the \nneural network. This was the outcome in every re-run, and the weight is selected again whenever the models are \nretrained. The result is a finding about the scale of the labelled data, consistent with the trade -off between \nmemorisation and generalisation discussed in [9]. \n \nFigure 5.2. Validation accuracy for different weights on the CompatibilityNet (w = 0 is the linear model alone).  \n5.3.3 Diversity of the recommended set \nA per-item reuse cap increased the number of distinct items across the top five outfits from 8 to 14, with a very \nsmall loss of relevance (Figure 5.3). The cap operates on product identifiers, so visually near -identical items (for \nexample several g"
+  },
+  {
+    "page": 37,
+    "text": "ally near -identical items (for \nexample several grey handbags) can still recur under different identifiers; this is a recognised limitation. \n \nFigure 5.3. Effect of the per-item reuse cap on the number of distinct items (a) and on set-level scores (b). \n5.3.4 End-to-end behaviour \nTo check the integrated pipeline, it was run for several profiles. For narrower profiles, such as a formal winter \nprofile in size S, strict filtering on size, season and usage left too few eligible products, and fewer than five outfits \nsatisfied the similarity threshold and the reuse cap. This limitation was not visible in component -level tests and \nmotivated the fallback described in Section 5.3.6. Figure 5.4 shows the five outfits  returned by the notebook for \none profile. \n"
+  },
+  {
+    "page": 37,
+    "text": "for \none profile. \n"
+  },
+  {
+    "page": 38,
+    "text": "38 \n \nFigure 5.4. Top five outfits returned by the notebook for a sample profile.  \n5.3.5 Sensitivity to the weighting \nChanging the balance between relevance and compatibility changed which outfits appeared in the top five, from \nalmost complete overlap with the default set to none, depending on the weighting and the run. Following the idea \nof weight stability [12], this indicates that the default weighting (compatibility 0.6, relevance 0.4) lies in a narrow \nstability interval; it is therefore a stated design preference and not an empirically validated optimum. \n5.3.6 Deployed system: pre-computed recommendations \nTo serve recommendations without running the neural pipeline on every request, the engine is run once offline \nfor every combination of 4 sizes, 5 body shapes, 5 occasions and"
+  },
+  {
+    "page": 38,
+    "text": "ination of 4 sizes, 5 body shapes, 5 occasions and 4 seasons (400 profiles). To address the sparse -\npool limitation, a three -level fallback was added: level 0 applies the strict filter, level 1 ignores the season, and \nlevel 2 also broadens the usage filter. Size is always enforced. The occasions wedding and interview, which have \nno matching value in the usage field of the dataset, are mapped to the nearest usage values. For each profile the \nexport stores up to five outfits, their deterministic ex planations and a ranked candidate pool for each garment \ncategory, which is used when the shopper replaces a single piece. At request time the server joins these identifiers \nwith the live catalogue held in DynamoDB, removes any piece that is out of stock or  no longer offered in the \nshopper"
+  },
+  {
+    "page": 38,
+    "text": "out of stock or  no longer offered in the \nshopper’s size, and shows each piece in the shopper’s size. \nThe justification shown with each outfit is generated at request time by a language model that receives only \nstructured evidence about the outfit (garment categories, colours, colour relationship, occasion, season and size) \nand is instructed not to invent attributes or to quote raw scores; a deterministic template is used if the model is \nunavailable. The explanation is regenerated whenever the selection changes and is mark ed as customised when \nthe outfit differs from the model’s pick. \n5.4 Virtual Try-On Model (Model 3) \nModel 3 was evaluated qualitatively. The pre -trained model was neither trained nor fine -tuned in this project, a \nshopper has no ground -truth photograph of he rs"
+  },
+  {
+    "page": 38,
+    "text": " \nshopper has no ground -truth photograph of he rself wearing the product, and neither a reference -free image-\nquality metric nor a user study was run. This section therefore reports what was observed in the notebook runs \non a Colab T4 GPU and in the website, and the limitations that follow. \nThree kinds of input were used. A front -facing, full-body photograph of one person standing against a plain wall \nserved as the shopper. The garment photographs came from the product images of the project (a belted shirt \n"
+  },
+  {
+    "page": 39,
+    "text": "39 \ndress) and from the public catalogue of 60 × 80 pixel photographs (a T-shirt and trousers). The website run used \nthe products of a recommended outfit. Table 5.4 lists the runs and Figure 5.6 shows the notebook results. \nTable 5.4. Try-on runs recorded in the notebook and in the website. \nRun Garment input Detected category and \nwarnings \nTime on \nT4 \nObservation \nDress (notebook, \nStep 10) \nBelted shirt dress, product \nimage of the project \ndresses; warning that the \nphotograph is ambiguous \nbetween an upper-body \ngarment and a dress \n462 s Collar, short sleeves and belt \nof the dress are rendered; \nface, hair and shoes are those \nof the original photograph \nTwo-piece outfit \n(notebook, Step 11) \nT-shirt and trousers, 60 × \n80 pixel catalogue images \nlower_body, then \nupper_body; low-"
+  },
+  {
+    "page": 39,
+    "text": "talogue images \nlower_body, then \nupper_body; low-resolution \nwarning for both \n343 s + 90 \ns \nBoth garments applied, \nbottom first; the result is \nblurred and shows an artefact \nat the waist \nWebsite run (Figure \n5.5) \nTop of the recommended \noutfit, a white blouse with \na bow \nTop, passed by the site Not timed Top rendered on the shopper; \nthe lower body is unchanged \nbecause only the main \ngarment is sent \nSource: Model 3 notebook (steps 10 and 11) and the website run of Figure 5.5; times from single runs on a Colab T4 GPU. \n \nIn the one-piece run the dress was recognised although the parser labelled 109,108 pixels as upper clothes and \n153,110 pixels as dress, and the generated image shows the dress with the collar, the short sleeves and the belt \nwhile the face, hair and shoes of the "
+  },
+  {
+    "page": 39,
+    "text": "d the belt \nwhile the face, hair and shoes of the original photograph are kept. In the two -piece run both garments were \ndetected and applied, the trousers first, but the catalogue images are so small that the garments are blurred, and \nthe result shows an artefact at the waist. The notebook notes that the quality of the second step is slightly lower \nthan that of the first, because it starts from an image that was itself generated. The times are those of single runs; \nthe first run of a session also loads the model, so they indicate the order of magnitude, minutes per outfit, and \nnot a benchmark. "
+  },
+  {
+    "page": 40,
+    "text": "40 \n \nFigure 5.6. Try-on runs in the notebook: (a) a dress; (b) trousers and a T-shirt from 60 × 80 pixel catalogue images. Each row \nshows the shopper’s photograph, the garment image and the result; in (b) the trousers are applied first and the T -shirt \nsecond. \nFigure 5.5 shows the shopper’s photograph before and after a generation requested from the website. The label \nof the preview changes from “Preview” to “Virtual Fitting Active”. The top of the selected outfit is rendered on \nthe shopper, while the trousers are still the shopper’s own jeans, bec ause the website passes only the main \ngarment to the service (Section 4.5); the shoes and the handbag of the outfit appear only in the selection list, \nbecause the model cannot render them. \n"
+  },
+  {
+    "page": 40,
+    "text": ". \n"
+  },
+  {
+    "page": 41,
+    "text": "41 \n \nFigure 5.5. Try-on from the website: (a) the shopper’s photograph while the try-on is being generated and (b) the result, in \nwhich the top of the selected outfit is rendered on the shopper. \nFour limitations were observed. (i) The quality of the result depends on the resolution of the garment photograph, \nand the small images of the public catalogue give blurred garments. (ii) Layering two garments lowers the quality \nof the second step. (iii) A photograph that shows several garments needs the category to be given explicitly. (iv) \nEach generation takes minutes, and the public address of the service changes every time the notebook is started. \nNo image -quality metric was computed, because the shopper has no reference image, the model was not \nretrained and the number of runs is sma"
+  },
+  {
+    "page": 41,
+    "text": "l was not \nretrained and the number of runs is small. The results are therefore a demonstration that the module works inside \nthe application on the shopper’s own photograph, and not evidence of realism or of an effect on purchase \ndecisions. \n5.5 Summary and Threats to Validity \nThe recommendation experiments support three conclusions. First, rebalancing  the compatibility network \nimproved held-out accuracy from 0.646 to 0.789. Second, the per -item reuse cap increased outfit -set diversity \nwith negligible relevance cost. Third, the end -to-end evaluation exposed a candidate -pool limitation that \ncomponent-level tests did not, which the fallback ladder in the deployed system addresses. Four threats to validity \nremain. (i) Labels are catalogue-derived proxies, not human preferences. (i"
+  },
+  {
+    "page": 41,
+    "text": "talogue-derived proxies, not human preferences. (ii) The labelled set is small (948 training \npairs), so the neural network is no t yet justified over the linear model. (iii) The catalogue mixes isolated product \nphotographs with on-model photographs; embeddings of the latter encode the garment and the wearer together, \nand fashion CLIP models are reported to be biased towards centred product images on plain backgrounds [15]. \n(iv) Beam-search latency has not been benchmarked against the exhaustive pipeline. No human evaluation or \npublic benchmark was used, so the results support the internal comparisons made here but not claims of \nsuperiority over the systems in Section 2. \n"
+  },
+  {
+    "page": 42,
+    "text": "42 \nFor the body-measurement model the threats are as follows. The evidence is qualitative and comes from a few \nphotographs without ground truth. The widths are measured from the front, so they are not girths [24], [25]. \nErrors in the stated height propagate to all widths, because the scale is derived from it [21]. \nFor the virtual try-on model the threats are as follows. The evidence is qualitative and comes from a few runs with \none shopper photograph, so different body sha pes, skin tones, poses and garment types are not covered. The \ntimes come from single runs on a free GPU whose availability varies. The result depends on the resolution of the \ncatalogue photographs, which in the public dataset are very small. And the website currently sends only the main \ngarment, so the layered ou"
+  },
+  {
+    "page": 42,
+    "text": "ly sends only the main \ngarment, so the layered outfit of Section 3.4.4 was shown only in the notebook. "
+  },
+  {
+    "page": 43,
+    "text": "43 \n6. Discussion \n6.1 Interpretation of the Compatibility Results \nThe most informative result is a negative one. After rebalancing, the dual -path network reached 0.789 test \naccuracy but remained well below the linear model (0.932), and the validation sweep gave the linear model full \nweight. Three observations explain this. First, the labelled set is small: 948 training pairs cannot support a network \nwith a six-figure parameter count, which is the memorisation-versus-generalisation trade-off that motivated wide-\nand-deep models [9]. Second, the metadata -only model (0.928) is almost as accurate as the linear model with \nvisual features (0.932), which suggests that the proxy labels depend mainly on category and colour. High accuracy \ntherefore reflects, in part, the model recovering it"
+  },
+  {
+    "page": 43,
+    "text": "erefore reflects, in part, the model recovering its own labelling rule rather than independent knowledge of what \npeople consider well matched. Third, the visual signal alone is informative (0.705) but weaker, so a deep visual \nbranch has little to add until more or better labels are available. For this reason the accuracy figures should be \nread as evidence that the pipeline learns what the labels encode, not as evidence about shopper taste. \n6.2 Stability and Design Choices \nThe weight-sensitivity analysis shows that the identity of the top five outfits depends on the balance between \nrelevance and compatibility. The compatibility -led default (0.6 and 0.4) and the 0.55 compatibilit y floor are \ntherefore stated design decisions, not optima; validating them requires human preference data"
+  },
+  {
+    "page": 43,
+    "text": "ma; validating them requires human preference data or implicit \nfeedback such as clicks and cart additions. Following [12], the sensitivity is reported rather than hidden. Likewise, \nthe reuse cap acts on product identifiers, so near-identical items under different identifiers can still repeat; a cap \ndefined on embedding similarity is the natural next step. \n6.3 Trade-offs of Pre-Computation \nPre-computing recommendations makes the application deterministic, fast and free to run, and it keeps price and \nstock live because they are joined at request time. The costs are three. The profile space is discrete: only body \nshape, size, occasion and season influence the outfits, so two shoppers with the same four valu es see the same \nfive outfits, and finer measurements (for example a different "
+  },
+  {
+    "page": 43,
+    "text": ", and finer measurements (for example a different waist -to-hip ratio within the same shape) do not \nchange the result. Products added to the catalogue are not ranked until the index is regenerated. And the season \ndefaults to the current date, so the same profile yields different outfits across the year, which is intended but \nshould be communicated to the shopper. Serving the model live from a separate free -tier host may be possible, \nbut it was not adopted or tested in this project, because it would add a second runtime to maintain. \n6.4 Relation to Existing Work \nThe engine shares its main ingredients with recent systems: fashion CLIP embeddings and occasion priors \nexpressed as prompts [8], and ranking that discourages repetition [7] . It differs in treating body shape, size \navailab"
+  },
+  {
+    "page": 43,
+    "text": ". It differs in treating body shape, size \navailability, occasion and season as explicit inputs for a shop that can recommend only what is in stock in the \nshopper’s size. It is weaker than the cited systems in its evaluation: no benchmark such as Polyvore and no human \nstudy was used, so superiority over them is not claimed. "
+  },
+  {
+    "page": 44,
+    "text": "44 \n6.5 Fairness, Inclusivity and Ethical Considerations \nThe body-shape rules (Appendix E) are common styling conventions chosen by the project team; they were not \nvalidated with stylists or shoppers and may encode normative assumptions about which silhouettes “suit” which \nbodies. They should be presented to shoppers as suggestions and be easy to override, which the interface supports \nby allowing any piece to be replaced. The catalogue stocks sizes S to XL only, so shoppers outside that range \nreceive no exact -size recommendation, and mapping XS to S is an approximation. The catalogue and its labels \ncome from a single public dataset, which may not represent the shop’s audience. Finally, recommen dations \ndepend on Model 1; photographs are personal data, and their handling is discusse"
+  },
+  {
+    "page": 44,
+    "text": " are personal data, and their handling is discussed in the section on Model 1. \n6.6 Were the Objectives Met? \nTable 6.1. Status of the project objectives. \nObjective Status Evidence \nO1 Platform Implemented Section 4.8 \nO2 Body measurement and size Implemented; examined on a few test \nphotographs, accuracy against tape measurements \nnot yet measured \nSections 3.2 and 5.2 \nO3 Outfit recommendation Met, with the limitations stated in Sections 5.5 and \n6.1 \nSection 5.3 \nO4 Virtual try-on Implemented as a queued GPU service called by \nthe website; evidence is qualitative; takes minutes \nper outfit; renders tops, bottoms and dresses only \nSections 3.4, 4.5 and 5.4 \nO5 Integration Implemented; error propagation between models \nnot measured \nSections 3.1 and 4.5 \nO6 Low cost and reproducibility D"
+  },
+  {
+    "page": 44,
+    "text": "ons 3.1 and 4.5 \nO6 Low cost and reproducibility Designed for free tiers; actual running cost not \naudited \nSections 3.6 and 4.6 \nO7 Evaluation Partly met: no user study or public benchmark Section 5.5 \nSource: this report (Sections 3 to 5). \n \n6.7 Discussion of Models 1 and 3 and of the Integrated System \nModel 1. The main strength of the module is that it is transparent: every step is a simple, inspectable computation, \nit needs no training data, it runs quickly and at no cost, and it reports how rel iable its waist value is. The \nexperiments show the value of diagnosing a baseline rather than adopting it: the landmark -based hip estimate \nwas wrong because it measured a different quantity, and the segmentation -based waist search was wrong for \nloose clothing; each failure led to a spec"
+  },
+  {
+    "page": 44,
+    "text": "ng for \nloose clothing; each failure led to a specific correction. The same discipline produced the alignment of the body -\nshape classes with those of the recommendation engine, an interface defect that could not be seen from either \ncomponent alone. \nThe limitations are equally clear. (i) The evidence is qualitative and drawn from a few photographs, without ground \ntruth. (ii) The height must be supplied, and scale is derived from the nose-to-ankle distance, which biases all widths "
+  },
+  {
+    "page": 45,
+    "text": "45 \nupwards; monocular height inference is itself u ncertain [21]. (iii) Widths seen from the front are not \ncircumferences, so waist and hip sizes are underestimated for fuller bodies unless a conversion is applied, and \narms close to the body inflate the hip width. (iv) The waist fallback recovers a position but not the true width. (v) \nThe height offsets of the chest and thigh and the body-shape thresholds are empirical and have not been validated \nagainst experts. (vi) The size chart is a placeholder, only the shoulder width influences the size in the service, and \nthe code contains more than one sizing rule. (vii) The photograph is personal data; it is processed by the \nmeasurement service and, if that service fails, it is sent to an external language-model service. \nComparison with t"
+  },
+  {
+    "page": 45,
+    "text": "xternal language-model service. \nComparison with the literature.  Learning-based methods such as BMnet reach measurement accuracy that a \nhand-crafted pipeline cannot match, but they rely on a training set such as BodyM, on frontal and lateral \nsilhouettes, and on height and weight as inputs [23]. The present pipeline occupies a different point in the design \nspace: no training data, a single view, and complete transparency, with the cost that its accuracy is unknown until \nit is validated. Because FFIT classifications are sensitive to the definition of the measurements [24], the body -\nshape label of this module, which is derived from widths with uncalibrated thresholds, is treated as an \napproximate input: in the recommendation engine, body shape adds one of three equally weighted releva"
+  },
+  {
+    "page": 45,
+    "text": "dy shape adds one of three equally weighted relevance \nterms and never excludes a product. \nModel 3. The main strength of the module is that it gives the shopper a visual check of an outfit on her own \nphotograph at no per-call cost, with an open model whose code and weights are public. The surrounding pipeline \nmade it usable on shop photographs: garment clean ing removed mannequins and people from the product \nimages, layering produced outfits of a top and a bottom, and the restoration step kept the face, hair and shoes of \nthe shopper unchanged. \nThe limitations are as follows. (i) Each generation takes minutes, and the service depends on a free notebook GPU \nwhose public address changes at every start and which disconnects after some time, so the set -up suits \ndevelopment and demonstr"
+  },
+  {
+    "page": 45,
+    "text": "me, so the set -up suits \ndevelopment and demonstration, not continuous production use. (ii) The quality depends on the photographs:  \nsmall catalogue images give blurred garments, and a second layered garment lowers quality. (iii) Shoes and \naccessories are not rendered. (iv) The website sends only the main garment of the outfit. (v) The evidence is \nqualitative and comes from one shopper photograph. (vi) The shopper’s photograph is personal data that is sent \nto an external GPU service; it is deleted when the job finishes, but the shopper should be told that it leaves the \napplication. (vii) Dress Code was built from the catalogues of a sin gle fashion retail group [26], so the fidelity for \nother body shapes, skin tones and garment styles is unknown and was not tested. \nComparison with "
+  },
+  {
+    "page": 45,
+    "text": "s is unknown and was not tested. \nComparison with the literature.  IDM-VTON [19] and LaDI -VTON [20] report better results on benchmarks than \nearlier methods such as VITON [18], but both need a GPU. No comparison between them was run here, and LaDI-\nVTON was chosen for the openness of its code and weights and for its coverage of the three garment categories, \nnot for a measured advantage. \nA cross-cutting issue is er ror propagation. A wrong body -shape label or size from Model 1 changes every outfit \nshown by Model 2, and the garment image chosen by Model 2 limits what Model 3 can render. The quantitative \neffect of such errors across the three models has not been measured and is an open evaluation question. "
+  },
+  {
+    "page": 46,
+    "text": "46 \n7. Conclusion and Future Work \n7.1 Conclusion \nThis work designed and built FitStyle AI, a low -cost web application that combines body measurement, outfit \nrecommendation and virtual try-on in one shopping workflow. From a single full-body photograph and her height, \nthe shopper receives a body shape and a clothing size, five complete outfits for her size, body shape, occasion and \nseason, and a preview of the selected garments on her own photograph. Only the database, authent ication and \nimage storage are cloud services on free tiers, and the try -on model runs as a service on a free GPU notebook \nruntime. The evidence is uneven across the three components, and no user study was conducted, so claims about \nshopper preference remain open. The three AI components are summarised in tur"
+  },
+  {
+    "page": 46,
+    "text": "pen. The three AI components are summarised in turn. \nModel 1.  The body -measurement module shows that a transparent, training -free pipeline can turn one \nphotograph and a stated height into shoulder, chest, waist, hip and thigh widths, a body shape and a size, and \nthat experimental diagnosis of a landmark -based baseline is worthwhile: two weaknesses were found and \ncorrected, and every waist estimate now carries a method and a confidence flag. Its accuracy has not yet been \nvalidated against tape measurements, and its size chart and body-shape thresholds are placeholders, so its output \nis best treated as a calibrated starting point that the shopper can edit. \nModel 2. The recommendation engine designed and deployed for FitStyle AI composes complete outfits fro m a \nproduct catalogue "
+  },
+  {
+    "page": 46,
+    "text": "poses complete outfits fro m a \nproduct catalogue for a given body shape, size, occasion and season. Diagnosing the compatibility network by \nablation led to a rebalanced architecture whose test accuracy rose from 0.646 to 0.789; a beam -search \nconstruction with a per-item reuse cap nearly doubled the number of distinct items across the top five outfits at \na negligible relevance cost; and an end -to-end evaluation exposed a sparse -candidate-pool limitation that was \naddressed by a fallback ladder. The validation -selected ensemble reduced to the linear model, a finding that \nreflects the scale and nature of the labels rather than a defect of the design. The engine is served to the web \napplication at no additional cost by pre-computing its output and joining it with the live catalogue. "
+  },
+  {
+    "page": 46,
+    "text": "ts output and joining it with the live catalogue. \nModel 3. The virtual try-on module shows that an open latent-diffusion model, LaDI-VTON, can be placed behind \na shop workflow at no per -call cost by adding garment cleaning, person preparation, sequential layering and \nidentity restoration around it and by serving it from a free GPU as a queued service. In the notebook runs and in \nthe website it rendered tops, bottoms and a dress on the shopper’s photograph and kept her face, hair and shoes. \nEach generation takes minutes, the evidence is qualitative and comes from  one shopper photograph, and the \nwebsite currently sends only the main garment of the outfit. \n7.2 Future Work \nFuture work is organised by component, in the order of the shopper’s journey: the body -measurement module \n(Mod"
+  },
+  {
+    "page": 46,
+    "text": "pper’s journey: the body -measurement module \n(Model 1), the recommendation engine (Mo del 2) and the virtual try -on module (Model 3), followed by the \nplatform as a whole. \n7.2.1 Model 1: Body-Measurement Module \nThe following steps are proposed. (i) Validate the module against tape measurements taken according to ISO \n8559-1 [25] on a larger a nd more varied group, and calibrate the height offsets, the body -shape thresholds and \nthe size chart on that data. (ii) Estimate girths instead of widths, for example by adding a lateral photograph, as "
+  },
+  {
+    "page": 47,
+    "text": "47 \nBodyM does [23]. (iii) Use the world -coordinate landmarks that the Pose Landmarker already returns [22] to \nobtain a metric reference that does not depend on the nose -to-ankle distance. (iv) Detect the garment type in \nadvance so that unreliable cases are flagged before measurement. (v) Replace the placeholder size chart with \nbrand charts and let hip width influence the size. \n7.2.2 Model 2: Outfit Recommendation Engine \nFor the recommendation engine the following steps are proposed. \n• Collect human preference or implicit -feedback data (ratings, clicks, cart additions) to replace the proxy \nlabels and to validate the weighting, the compatibility floor and the body-shape rules. \n• Revisit the neural branch once the labelled set is larger, or use self-supervised pre-training to redu"
+  },
+  {
+    "page": 47,
+    "text": "arger, or use self-supervised pre-training to reduce the \ndependence on labels. \n• Define the reuse cap on embedding similarity rather than product identity, and widen the candidate pool \nadaptively for sparse profiles. \n• Benchmark beam-search latency against exhaustive search and evaluate on a public outfit -compatibility \nbenchmark. \n• Replace pre-computation by a live service if new products must be ranked immediately, and make the \nprofile continuous by using measurements beyond shape and size. \n• Extend the size range beyond S to XL and replace the XS-to-S mapping with real stock. \n7.2.3 Model 3: Virtual Try-On Module \nThe following steps are proposed. (i) Evaluate the module with a reference -free image-quality metric and with a \nuser study that includes several shoppers, body shape"
+  },
+  {
+    "page": 47,
+    "text": "r study that includes several shoppers, body shapes and skin tones. (ii) Send the complete top -and-bottom \noutfit from the website and measure how much quality the second step loses. (iii) Host the service on a persistent \nGPU with a stable address instead of a temporary notebook address, and cache the results of outfits that are \nrequested repeatedly. (iv) Reduce the latency, fo r example with fewer denoising steps or a smaller image, and \ncompare LaDI -VTON with IDM -VTON [19] on the same inputs. (v) Require garment photographs of sufficient \nresolution and use the garment category stored in the catalogue instead of detecting it. \n7.2.4 Platform as a Whole \nFor the platform as a whole the following steps are proposed. \n• Harden the remaining server endpoints (product management, user pr"
+  },
+  {
+    "page": 47,
+    "text": "ning server endpoints (product management, user profile, measurements, order history, \nanalytics) with authentication, ownership and administrator checks. \n• Measure the effect of error propagation across the three models, for example how a wrong body -shape \nlabel or size from Model 1 changes the outfits shown by Model 2, and how the garment image chosen by \nModel 2 limits what Model 3 can render. "
+  },
+  {
+    "page": 48,
+    "text": "48 \nReferences \n[1]  A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark, G. Krueger, and  \nI. Sutskever, “Learning Transferable Visual Models From Natural Language Supervision,” in Proc. Int. Conf. Machine \nLearning (ICML), 2021, pp. 8748–8763. arXiv:2103.00020. Available: https://arxiv.org/abs/2103.00020 \n[2]  P. J. Chia, G. Attanasio, F. Bianchi, S. Terragni, A. R. Magalhães, D. Goncalves, C. Greco, and J. Tagliabue, “Con trastive \nlanguage and vision learning of general fashion concepts,” Scientific Reports, vol. 12, art. 18958, 2022, doi: \n10.1038/s41598-022-23052-9. Available: https://doi.org/10.1038/s41598-022-23052-9 \n[3]  Marqo, “Marqo-FashionCLIP model card,” Hugging Face. Fine-tuned from ViT-B-16 (laion2b_s34b_b88k) with \n"
+  },
+  {
+    "page": 48,
+    "text": "ine-tuned from ViT-B-16 (laion2b_s34b_b88k) with \nGeneralised Contrastive Learning. Accessed: Oct. 2026. Available: https://huggingface.co/Marqo/marqo-fashionCLIP \n[4]  X. Han, Z. Wu, Y.-G. Jiang, and L. S. Davis, “Learning Fashion Compatibility with Bidirectional LSTMs,” in Proc. ACM Int. \nConf. Multimedia (MM), 2017. arXiv:1707.05691. Available: https://arxiv.org/abs/1707.05691 \n[5]  M. I. Vasileva et al., “Learning Type-Aware Embeddings for Fashion Compatibility,” in Proc. European Conf. Computer \nVision (ECCV), 2018. arXiv:1803.09196. Available: https://arxiv.org/abs/1803.09196 \n[6]  K. Kalashi and B. Teimourpour, “A Hybrid Multimodal Deep Learning Framework for Intelligent Fashion \nRecommendation,” arXiv:2511.07573, 2025. Available: https://arxiv.org/abs/2511.07573 \n[7]  T. Koukopoulo"
+  },
+  {
+    "page": 48,
+    "text": "tps://arxiv.org/abs/2511.07573 \n[7]  T. Koukopoulos, D. Klimenof, and I. Xarchakos, “TrendGen: An Outfit Recommendation and Display System,” \narXiv:2603.27264, Mar. 2026. Available: https://arxiv.org/abs/2603.27264 \n[8]  A. Berlia, “Loom: Hybrid Retrieval-Scoring Outfit Recommendation with Semantic Material Compatibility and Occasion -\nAware Embedding Priors,” arXiv:2605.09830, May 2026. Available: https://arxiv.org/abs/2605.09830 \n[9]  H.-T. Cheng et al., “Wide & Deep Learning for Recommender Systems,” in Proc. 1st Workshop on Deep Learning for \nRecommender Systems (DLRS), 2016, pp. 7–10, doi: 10.1145/2988450.2988454. Available: \nhttps://doi.org/10.1145/2988450.2988454 \n[10]  C. Meng, J. Luo, P. Feng, Z. Yan, C. Hu, Z. Gan, and C. Ouyang, “Mitigating Shared -Private Branch Imbalance via D"
+  },
+  {
+    "page": 48,
+    "text": "“Mitigating Shared -Private Branch Imbalance via Dual-\nBranch Rebalancing for Multimodal Sentiment Analysis,” arXiv:2604.25179, 2026 (acc epted at ACM Multimedia \n2026). Available: https://arxiv.org/abs/2604.25179 \n[11]  A. K. Vijayakumar, M. Cogswell, R. R. Selvaraju, Q. Sun, S. Lee, D. Crandall, and D. Batra, “Diverse Beam Search for \nImproved Description of Complex Scenes,” in Proc. AAAI Conf. Artificial Intelligence, vol. 32, no. 1, 2018, doi: \n10.1609/aaai.v32i1.12340. Available: https://doi.org/10.1609/aaai.v32i1.12340 \n[12]  R. O’Shea, P. Deeney, E. Triantaphyllou, L. Diaz-Balteiro, and S. A. Tarim, “Weight stability intervals for multi-criteria \ndecision analysis using the weighted sum model,” Expert Systems with Applications, vol. 296, art. 128460, 2026, doi: \n10.1016/j.eswa.2025."
+  },
+  {
+    "page": 48,
+    "text": "296, art. 128460, 2026, doi: \n10.1016/j.eswa.2025.128460. Available: https://doi.org/10.1016/j.eswa.2025.128460 \n[13]  A.-S. Sheikh, R. Guigourès, E. Koriagin, Y. K. Ho, R. Shirvany, R. Vollgraf, and U. Bergmann, “A Deep Learning System for \nPredicting Size and Fit in Fashion E-Commerce,” in Proc. ACM Conf. Recommender Systems (RecSys), 2019. \narXiv:1907.09844. Available: https://arxiv.org/abs/1907.09844 \n[14]  ashraq, “fashion-product-images-small,” Hugging Face dataset (user ashraq). Accessed: Oct. 2026. Available: \nhttps://huggingface.co/datasets/ashraq/fashion-product-images-small \n[15]  P. J. Chia et al., “fashion-clip model card,” Hugging Face (describes FashionCLIP training data and noted limitations). \nAccessed: Oct. 2026. Available: https://huggingface.co/patrickjohncyh/fashion-cl"
+  },
+  {
+    "page": 48,
+    "text": ": https://huggingface.co/patrickjohncyh/fashion-clip \n[16]  V. Bazarevsky et al., “BlazePose: On-device Real-time Body Pose tracking,” arXiv:2006.10204, 2020. Available: \nhttps://arxiv.org/abs/2006.10204 \n[17]  S. Bai et al., “Qwen2.5-VL Technical Report,” arXiv:2502.13923, 2025. Available: https://arxiv.org/abs/2502.13923 \n[18]  X. Han et al., “VITON: An Image-Based Virtual Try-On Network,” in Proc. IEEE/CVF Conf. Computer Vision and Pattern \nRecognition (CVPR), 2018, pp. 7543–7552. arXiv:1711.08447. Available: https://arxiv.org/abs/1711.08447 "
+  },
+  {
+    "page": 49,
+    "text": "49 \n[19]  Y. Choi et al., “Improving Diffusion Models for Authentic Virtual Try-on in the Wild,” in Proc. European Conf. Computer \nVision (ECCV), 2024. arXiv:2403.05139. Available: https://arxiv.org/abs/2403.05139 \n[20]  D. Morelli, A. Baldrati, G. Cartella, M. Cornia, M. Bertini, and R. Cucchiara, “LaDI -VTON: Latent Diffusion Textual-\nInversion Enhanced Virtual Try-On,” in Proc. 31st ACM Int. Conf. Multimedia (MM ’23), 2023, pp. 8580 –8589, doi: \n10.1145/3581783.3612137. arXiv:2305.13501. Available: https://doi.org/10.1145/3581783.3612137 \n[21]  S. Günel, H. Rhodin, and P. Fua, “What Face and Body Shapes Can Tell Us About Height,” in Proc. IEEE/CVF Int. Conf. \nComputer Vision Workshops (ICCVW), 2019, doi: 10.1109/ICCVW.2019.00226. arXiv:1805.10355. Available: \nhttps://doi.org/10.1109/ICC"
+  },
+  {
+    "page": 49,
+    "text": "805.10355. Available: \nhttps://doi.org/10.1109/ICCVW.2019.00226 \n[22]  Google AI Edge, “Pose landmark detection guide,” MediaPipe Solutions documentation (Pose Landmarker task: 33 \nlandmarks, world coordinates and optional segmentation mask). Accessed: Oct. 2026. Available: \nhttps://developers.google.com/edge/mediapipe/solutions/vision/pose_landmarker \n[23]  N. Ruiz et al., “Human Body Measurement Estimation with Adversarial Augmentation,” in Proc. Int. Conf. 3D Vision \n(3DV), 2022. arXiv:2210.05667. Available: https://arxiv.org/abs/2210.05667 \n[24]  C. J. Parker, S. G. Hayes, K. Brownbridge, and S. Gill, “Assessing the female figure identification technique’s reliability \nas a body shape classification system,” Ergonomics, vol. 64, no. 8, pp. 1035 –1051, 2021, doi: \n10.1080/00140139.2021."
+  },
+  {
+    "page": 49,
+    "text": "pp. 1035 –1051, 2021, doi: \n10.1080/00140139.2021.1902572. Available: https://doi.org/10.1080/00140139.2021.1902572 \n[25]  ISO, “ISO 8559-1:2017, Size designation of clothes — Part 1: Anthropometric definitions for body measurement,” \nInternational Organization for Standardization, 2017 (confirmed current in 2026). Available: \nhttps://www.iso.org/standard/61686.html \n[26]  D. Morelli, M. Fincato, M. Cornia, F. Landi, F. Cesari, and R. Cucchiara, “Dress Code: High-Resolution Multi-Category \nVirtual Try-On,” in Proc. European Conf. Computer Vision (ECCV), 2022, doi: 10.1007/978 -3-031-20074-8_20. \nAvailable: https://doi.org/10.1007/978-3-031-20074-8_20 \n[27]  R. Rombach, A. Blattmann, D. Lorenz, P. Esser, and B. Ommer, “High -Resolution Image Synthesis with Latent Diffusion \nModels,” in Proc"
+  },
+  {
+    "page": 49,
+    "text": " Synthesis with Latent Diffusion \nModels,” in Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR), 2022,  pp. 10684–10695. \narXiv:2112.10752. Available: https://arxiv.org/abs/2112.10752 \n[28]  miccunifi, “ladi-vton: official repository of LaDI-VTON,” GitHub. Accessed: Oct. 2026. Available: \nhttps://github.com/miccunifi/ladi-vton "
+  },
+  {
+    "page": 50,
+    "text": "50 \nAppendices \nAppendix A. System Architecture and Recommendation Interfaces \nThe recommendation engine is exposed to the web application through three authenticated endpoints. \nRecommendations are looked up from the pre -computed index and joined with the live catalogue; no neural \ninference occurs at request time. \nTable A.1. Recommendation interfaces. \nEndpoint Input Output \nGET /api/recommendations size, body shape, occasion, season (optional; \ndefaults to the current season) \nUp to five outfits; each with its pieces (live \nprice, colour, size, image), match score and \nexplanation \nGET \n/api/recommendations/alternatives \nProfile and a garment category Other suitable products of that category in \nthe shopper’s size, ranked by relevance \nPOST /api/analyze-body Photograph and height Widt"
+  },
+  {
+    "page": 50,
+    "text": "\nPOST /api/analyze-body Photograph and height Widths, body shape, size and annotated \nphotograph (Appendix J) \nPOST /api/recommendations/explain Profile and the identifiers of the currently \nselected pieces \nHeadline, explanation and a one-line \nrationale for exactly that selection \nSource: server code of the application. \n \nShopper profile → look-up of pre-computed outfits → join with DynamoDB -backed catalogue (stock, size, price) \n→ presentation of five outfits  → optional replacement of a single piece from the category pool → regenerated \njustification → add to cart. The cart is stored per user and is emptied after a successful payment. \nAppendix B. Recommendation Pipeline Configuration \nTable B.1. Parameters of the recommendation pipeline. \nParameter Value Meaning \nEmbedding model Mar"
+  },
+  {
+    "page": 50,
+    "text": "ine. \nParameter Value Meaning \nEmbedding model Marqo-FashionCLIP (frozen) Image and text embeddings in one space [3] \nImage / text fusion weights 0.7 / 0.3 Weights used to combine item image and text \nembeddings \nRelevance weights (style, body shape, \noccasion) \n1/3 each Equal weighting of the three relevance signals \nOccasion penalty factor λ 2.0 Penalty on similarity to the anti-vibe prompt \nCandidates per core category / optional \nslot \n12 / 8 Pool sizes before outfit assembly \nBeam width 30 Partial outfits kept per search step \nOutfit score weights 0.6 compatibility, 0.4 relevance Compatibility-led default \nColour penalty weight 0.1 Penalty for non-neutral colour clashes "
+  },
+  {
+    "page": 51,
+    "text": "51 \nParameter Value Meaning \nMinimum compatibility floor 0.55 Outfits whose weakest pairwise link is lower \nare dropped \nMaximum item reuse 2 Maximum number of top outfits that may \nshare one item \nTrain / validation / test fractions 0.70 / 0.15 / 0.15 Product-level split \nOptimiser Adam, lr 1×10⁻³, batch 64, weight decay \n3×10⁻⁴ \nCompatibility network training \nEpochs / patience / dropout up to 120 / 12 / 0.2 Early stopping on validation loss \nRandom seed 42 Python, NumPy and PyTorch \nSource: configuration block of the recommendation notebook. \n \nAppendix C. Pipeline Summary \nFor a profile (size, body shape, occasion, season, style) the engine proceeds as follows. (1) Filter the catalogue to \nproducts available in the shopper’s size and matching the season and occasion (with the fallback "
+  },
+  {
+    "page": 51,
+    "text": "tching the season and occasion (with the fallback ladder of Section \n5.3.6). (2) Embed each remain ing product and compute three relevance signals: similarity to a style –season \nprompt; a body -shape score equal to the maximum similarity to “preferred” silhouette prompts minus the \nmaximum similarity to “avoided” prompts; and an occasion affinity equal to similarity to the occasion prompt \nminus a penalty for similarity to the contrasting prompt. (3) Average the three signals into a relevance score and \nkeep the best candidates per garment category. (4) Assemble outfits from category templates with beam search, \nscoring each partial outfit with 0.6 × mean pairwise compatibility + 0.4 × mean relevance − 0.1 × colour penalty. \n(5) Discard outfits whose weakest pairwise compatibility is belo"
+  },
+  {
+    "page": 51,
+    "text": "tfits whose weakest pairwise compatibility is below 0.55. (6) Select the final five outfits in score \norder, skipping any outfit that exceeds the similarity threshold with an earlier outfit or would reuse an item more \nthan twice. (7) Generate an explanation from structured evidence. \nAppendix D. Catalogue Description \nTable D.1. Catalogue composition by garment category. \nGarment category Products \nAccessory 4,683 \nTop 2,939 \nShoes 2,799 \nBottom 497 \nDress 390 \nOuterwear 205 \nTotal 11,513 \nSource: catalogue loaded in the recommendation notebook from the dataset [14]. \n "
+  },
+  {
+    "page": 52,
+    "text": "52 \nAttributes used are the product identifier, gender, article type, base colour, usage, season and display name. The \nsource dataset is [14]. Available sizes and prices were generated for the DynamoDB catalogue by a seeded script, \nbecause the source dataset provides neither; the recommendation export reads the sizes actuall y stored in \nDynamoDB so that no recommendation contains a size the shop does not hold. \nAppendix E. Body-Shape and Occasion Prompts \nTable E.1. Silhouette preferences used for the body-shape score. \nBody shape Preferred silhouettes Avoided silhouettes \nPear A-line skirt or dress; wrap top or dress; flared silhouette; \nboat-neck or off-shoulder top \nBodycon fit; pencil skirt; skinny tapered \nbottoms \nHourglass Fitted, belted silhouette; wrap dress; high-waisted cut; "
+  },
+  {
+    "page": 52,
+    "text": " belted silhouette; wrap dress; high-waisted cut; V-\nneck top \nOversized boxy fit; shapeless silhouette \nApple Empire waist; A-line silhouette; flowy tunic; V-neck top Bodycon fit; cropped tight top \nRectangle Peplum top; belted waist; ruffled or layered design; flared \nsilhouette \nStraight, shapeless cut \nInverted triangle Flared or wide-leg bottom; A-line silhouette; bootcut fit Boat-neck top; puff sleeves; shoulder pads \nSource: design rules chosen by the project team; they were not validated with stylists. \n \nThe silhouette preferences are design rules chosen by the project team from common styling guidance; they were \nnot validated against expert stylists or user outcomes. Each occasion is represented by a descriptive “vibe” prompt \nand a contrasting “anti -vibe” prompt (for example, "
+  },
+  {
+    "page": 52,
+    "text": "d a contrasting “anti -vibe” prompt (for example, casual: “relaxed everyday casual comfortable easygoing \nweekend cotton denim sneakers” versus “formal black tie gown tuxedo evening wear”). The full prompt set is in \nthe project notebook. \nAppendix F. Reproducibility \n• Catalogue: Hugging Face dataset ashraq/fashion-product-images-small [14]. \n• Embedding model: Marqo/marqo-fashionCLIP loaded through OpenCLIP, used frozen [3]. \n• Seeds: 42 for Python, NumPy and PyTorch. The export of Section 5.3.6 is deterministic given the same \ncatalogue and sizes. \n• Try-on model: LaDI-VTON, official repository miccunifi/ladi-vton [28], with the Dress Code weights; Stable \nDiffusion 2 inpainting weights from a Hugging Face mirror; the notebook FitStyle_TryOn_LaDI_VTON, run \non a Colab T4 GPU (Appendices"
+  },
+  {
+    "page": 52,
+    "text": "ryOn_LaDI_VTON, run \non a Colab T4 GPU (Appendices G and K). \n• Artefacts: the project notebook (recommendation engine v20 and the website -export exte nsion), the \nexported recommendation index, and the server module that serves it. "
+  },
+  {
+    "page": 53,
+    "text": "53 \nAppendix G. Appendices for Models 1 and 3 \nTable G.1. Parameters of the body-measurement model (from the notebook and the service file). \nParameter Value \nPose model MediaPipe Pose Landmarker, heavy variant (float16), with segmentation mask \nLandmarks used 0 (nose), 11 and 12 (shoulders), 23 and 24 (hips), 25 (left knee), 27 (left ankle) \nScale stated height / pixel distance between nose and left ankle; default height 165 cm \nMask threshold 0.5 \nChest height mean shoulder height + 0.05 of the image height \nThigh height mean height of landmarks 23 and 25 + 0.03 of the image height \nWaist search window from 0.15 T below the shoulders to 0.10 T above the hips (T = torso height) \nWaist acceptance range relative position 0.35 to 0.65 of the torso; otherwise 0.55 and confidence low \nBody-sha"
+  },
+  {
+    "page": 53,
+    "text": "torso; otherwise 0.55 and confidence low \nBody-shape rules (centimetres) D = S − H, M = min(S, H) − W. Rectangle if |D| < 10 and |W − H| < 10; hourglass if |D| < 8 \nand M ≥ 15; apple if |W − H| < 10 and M < 15; pear if H − S ≥ 8; inverted triangle if S − H ≥ \n8; otherwise rectangle \nShoulder-width size chart (cm) S up to 40, M up to 44, L up to 48, otherwise XL (placeholder; hip limits of 90, 100 and 110 \nare defined but not used) \nImage padding right edge replicated until the width is a multiple of four pixels \nService endpoint and port POST detect-size and GET health on port 5001; fallback after 15 seconds \nSource: Model 1 notebook and service file. \n \nTable G.2. Parameters of the virtual try-on model and service (from the notebook). \nParameter Value \nModel LaDI-VTON, official repository"
+  },
+  {
+    "page": 53,
+    "text": "ameter Value \nModel LaDI-VTON, official repository miccunifi/ladi-vton, with the pre-trained Dress Code weights \nfor upper_body, lower_body and dresses \nDiffusion backbone Stable Diffusion 2 inpainting, loaded from the mirror alwold/stable-diffusion-2-inpainting \nbecause the original repository was removed \nPython environment Python 3.10 virtual environment; torch 2.0.1, torchvision 0.15.2, diffusers 0.14.0, \ntransformers 4.27.3, accelerate 0.18.0, huggingface_hub 0.14.1, opencv-python 4.7.0.72, \nmediapipe 0.10.14 \nHardware Google Colab with a T4 GPU \nInference settings dataset dresscode; test order unpaired; mixed precision fp16; batch size 1; 2 workers; PNG \noutput \nInput format Person and garment images of 768 × 1024 pixels; garment mask; body-part label map; 18 \nCOCO keypoints in a 384"
+  },
+  {
+    "page": 53,
+    "text": "; body-part label map; 18 \nCOCO keypoints in a 384 × 512 space \nGarment parsing segformer_b2_clothes (mattmdjaga/segformer_b2_clothes); rembg mask as a fallback; \nimages with a short side below 512 pixels are enlarged and those below 300 pixels are \nflagged as low resolution "
+  },
+  {
+    "page": 54,
+    "text": "54 \nParameter Value \nPose keypoints MediaPipe pose landmarks mapped to the COCO-18 layout; landmarks with visibility below \n0.3 are discarded; the neck is the midpoint of the shoulders \nLabel merging lower_body: skirt merged into pants; dresses: upper clothes, skirt, pants and belt merged \ninto dress \nOutfit order lower_body first, then upper_body; a dress is processed alone and the other garments are \nignored \nIdentity restoration Labels 1, 2, 3, 9, 10 and 11 (hat, hair, sunglasses, shoes and face) are copied back from the \noriginal photograph through a mask blurred with a Gaussian of radius 2 \nSource: Model 3 notebook. \n \nAppendix H. Application Screens \nThis appendix reproduces the screens of the application that are not shown in Chapter 4. Together with Figures \n4.2 to 4.6 and 5.5 they"
+  },
+  {
+    "page": 54,
+    "text": " 4. Together with Figures \n4.2 to 4.6 and 5.5 they cover the complete journey of a shopper and the two dashboards of the store owner (Table \n4.3), and they serve as a short user guide. \n \nFigure H.1. Landing page. \n"
+  },
+  {
+    "page": 55,
+    "text": "55 \n \nFigure H.2. Authentication screens: (a) shopper sign-in, (b) store-owner sign-in, (c) shopper sign-up and (d) store-owner sign-\nup, which is by invitation only. \n \nFigure H.3. Step 1: upload of the photograph and choice of the occasion.  \n"
+  },
+  {
+    "page": 56,
+    "text": "56 \n \nFigure H.4. Step 4: creation of the order, listing the chosen pieces by category slot, with export of a PDF summary. \n"
+  },
+  {
+    "page": 57,
+    "text": "57 \n \nFigure H.5. Shopping cart with the selected pieces, the order summary, a promo -code field and the choice between buying \nonline and paying offline. \n \nFigure H.6. Step 5: payment in the sandbox gateway with a test card. \n"
+  },
+  {
+    "page": 58,
+    "text": "58 \n \nFigure H.7. Step 6: order confirmation with delivery tracking and the download of the PDF summary.  \n"
+  },
+  {
+    "page": 59,
+    "text": "59 \n \nFigure H.8. PDF summary of an order paid offline, with the QR code and the shop location.  \n \nFigure H.9. Store owner’s inventory dashboard. \n"
+  },
+  {
+    "page": 60,
+    "text": "60 \n \nFigure H.10. Store owner’s sales and analytics dashboard. \n"
+  },
+  {
+    "page": 61,
+    "text": "61 \n \nFigure H.11. Try-on step after generation: the preview shows the shopper wearing the black top and beige trousers of the \nselected outfit, and the status label reads “Virtual Fitting Active”. \nAppendix I. MediaPipe Pose Landmarks \nThe Pose Landmarker returns 33 landmarks per person in normalised image coordinates and in world coordinates \n[22]. Table I.1 lists the index and the body part of each landmark and marks those used by the body-measurement \nmodel. \nTable I.1. The 33 pose landmarks and their use in the body -measurement model. \nIndex Landmark Used Index Landmark Used \n0 Nose scale 17 Left pinky no \n1 Left eye (inner) no 18 Right pinky no \n2 Left eye no 19 Left index no \n3 Left eye (outer) no 20 Right index no \n4 Right eye (inner) no 21 Left thumb no \n5 Right eye no 22 Right t"
+  },
+  {
+    "page": 61,
+    "text": "er) no 21 Left thumb no \n5 Right eye no 22 Right thumb no \n6 Right eye (outer) no 23 Left hip hip, waist, thigh \n7 Left ear no 24 Right hip hip, waist \n8 Right ear no 25 Left knee thigh \n9 Mouth (left) no 26 Right knee no \n10 Mouth (right) no 27 Left ankle scale \n11 Left shoulder shoulder, chest, waist 28 Right ankle no \n12 Right shoulder shoulder, chest, waist 29 Left heel no \n13 Left elbow no 30 Right heel no \n"
+  },
+  {
+    "page": 62,
+    "text": "62 \nIndex Landmark Used Index Landmark Used \n14 Right elbow no 31 Left foot index no \n15 Left wrist no 32 Right foot index no \n16 Right wrist no    \nSource: MediaPipe Pose Landmarker documentation [22]; the last column describes the use in this project. \n \nAppendix J. Body-Measurement Service Interface \nTable J.1. Request and response of the body-measurement service (from the service file). \nItem Field Content \nRequest (POST, JSON) imageBase64 Photograph as a base64 string; a data-URL prefix is accepted \nRequest (POST, JSON) heightCm Height in centimetres; 165 if omitted \nResponse measurements shoulder, chest, waist, hip and thigh widths and height_cm, \nin centimetres (a width is null if it cannot be read) \nResponse body_shape pear, hourglass, apple, rectangle, inverted_triangle or \nunknow"
+  },
+  {
+    "page": 62,
+    "text": "ss, apple, rectangle, inverted_triangle or \nunknown \nResponse recommended_size S, M, L or XL (shoulder-width chart) \nResponse waist_method and \nwaist_confidence \nsegmentation or proportional_fallback; high or low \nResponse line_positions Normalised vertical positions (0 to 1) of the shoulder, waist \nand hip lines \nResponse annotated_image_base64 JPEG of the photograph with the skeleton and the three \nlabelled reference lines \nErrors 400, 422, 500 Missing image; no person detected or undecodable image; \nany other failure \nSource: service file of the body-measurement service. \nAppendix K. Virtual Try-On Service Interface \nThe virtual try-on service of Section 4.5 is called by the Express server. Table K.1 lists its endpoints, the data \nexchanged, and the retention of photographs and results."
+  },
+  {
+    "page": 62,
+    "text": "ged, and the retention of photographs and results. \nTable K.1. Interface of the virtual try-on service (from the notebook). \nItem Request Response \nServer FastAPI application served by uvicorn on \nport 8000; temporary public address \ncreated with cloudflared; API key taken \nfrom the Colab secret TRYON_API_KEY or \ngenerated at random \nThe address and the key are printed when the cell \nis run and change each time "
+  },
+  {
+    "page": 63,
+    "text": "63 \nItem Request Response \nPOST /tryon Multipart form: person (image, at most 10 \nMB) and garments (JSON list of one to \nthree items, each with a url and an optional \ncategory); header X-API-Key \njob_id, status queued and the queue length; 400 \nfor invalid garments or an unsupported category, \n401 for a wrong key, 413 for a large image \nGET /jobs/{id} Header X-API-Key status (queued, running, done or error); the path of \nthe result when done; the error text when failed; \n404 when the job is unknown or has expired \nGET /results/{id} Header X-API-Key The try-on image as a PNG file; 404 if it is not found \nGET /health No key required ok and the number of queued jobs \nProcessing One worker thread takes the jobs from a \nfirst-in first-out queue \nOne generation at a time on the GPU \nRetention Th"
+  },
+  {
+    "page": 63,
+    "text": "\nOne generation at a time on the GPU \nRetention The uploaded photograph is deleted when \nthe job finishes \nResults are deleted after 3,600 seconds \nSource: the try-on service cell of the Model 3 notebook. \n "
+  }
+]
