@@ -1,6 +1,6 @@
 # ML Training
 
-Weekly sessions for learning to work with AI APIs in Python. The project includes Gemini and local Ollama summarizers, plus a retrieval-augmented generation (RAG) chat app for the FitStyle AI documentation.
+Weekly sessions for learning to work with AI APIs in Python. The project includes Gemini and local Ollama summarizers, a single-document FitStyle AI RAG chat app, and a conversational multi-document RAG search tool.
 
 ## Project structure
 
@@ -11,15 +11,26 @@ test-app/
 │   │   ├── __init__.py
 │   │   ├── main.py              # Gemini text summarizer
 │   │   └── local.py             # Ollama text summarizer
-│   └── rag_system/
-│       ├── app.py               # Streamlit chat interface
-│       ├── ask.py               # Document retrieval and answer generation
-│       ├── embedding.py         # Builds the document embedding index
-│       ├── strip.py             # Cleans the saved embedding metadata
-│       ├── FitStyle_AI_Documentation_final (1).pdf
-│       ├── embeddings.json      # Indexed text chunks and page numbers
-│       ├── vectors.npy          # Saved document vectors
-│       └── logo.png             # FitStyle AI logo and browser icon
+│   ├── rag_system/
+│   │   ├── app.py               # Streamlit chat interface
+│   │   ├── ask.py               # Document retrieval and answer generation
+│   │   ├── embedding.py         # Builds the document embedding index
+│   │   ├── strip.py             # Cleans the saved embedding metadata
+│   │   ├── FitStyle_AI_Documentation_final (1).pdf
+│   │   ├── embeddings.json      # Indexed text chunks and page numbers
+│   │   ├── vectors.npy          # Saved document vectors
+│   │   └── logo.png             # FitStyle AI logo and browser icon
+│   └── Conversational_system/
+│       ├── ask_conversational.py # Conversational multi-document RAG search
+│       ├── embedding.py          # Indexes all PDFs in docs/
+│       ├── embeddings.json       # Chunks with source filenames and pages
+│       ├── vectors.npy           # Saved vectors for the PDF chunks
+│       └── docs/                 # Source PDFs for multi-document search
+│           ├── Ancient_Egypt_History.pdf
+│           ├── cloud_computing.pdf
+│           ├── FitStyle_AI_Documentation_final (1).pdf
+│           ├── Global_Coffee_Industry_Reference.pdf
+│           └── Solar_PV_Technical_Reference.pdf
 ├── .env.example
 ├── pyproject.toml
 ├── uv.lock
@@ -39,7 +50,7 @@ test-app/
 
    ```ini
    GEMINI_API_KEY=your_gemini_key
-GEMINI_MODEL=gemini-3.8-flash
+   GEMINI_MODEL=gemini-3.8-flash
    ```
 
 4. Download the chat model used by the RAG app:
@@ -155,10 +166,13 @@ Branch: `session2`
 
 ### Session 2 assignment: Multi-document conversational search
 
-- Added a multi-document indexer for PDFs placed in `src/Conversational_system/docs/`.
-- Saved each text passage with its source filename and page number, plus normalized local embeddings.
-- Added retrieval with optional source filtering and follow-up question rewriting based on the recent chat history.
-- Generated answers with Ollama and reported source documents and pages.
+- Built a **conversational multi-document RAG system**. RAG means retrieval-augmented generation: the app finds relevant passages in the indexed PDFs and gives those passages to a language model to ground its answer.
+- Indexed every PDF in `src/Conversational_system/docs/`, splitting extracted text into overlapping chunks and saving each chunk with its source filename and page number.
+- Used the local Sentence Transformers embedding model **`all-MiniLM-L6-v2`** to create normalized vectors for both document passages and questions. This is the embedding model, not the answer-generating chat model.
+- Retrieved the most relevant passages across the documents, with an optional filter to search within one selected source PDF.
+- Added short-term conversation memory: the system uses up to the last three question-and-answer turns to rewrite follow-up questions (for example, resolving “what about its cost?” into a complete question) and maintain context while answering.
+- Used Ollama's **`gemma3:1b`** model as the local chat model to rewrite follow-ups and generate answers from the retrieved passages. Answers include the source PDF names and page numbers.
+- Included sample PDFs on FitStyle AI, ancient Egyptian history, cloud computing, the global coffee industry, and solar PV.
 
 Branch: `session-2-assignment`
 
