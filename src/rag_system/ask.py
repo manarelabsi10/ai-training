@@ -1,16 +1,14 @@
 import json
-import os
+from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
-from dotenv import load_dotenv
 from openai import OpenAI
-
-load_dotenv()
+from sentence_transformers import SentenceTransformer
 
 BASE_DIR = Path(__file__).resolve().parent
-EMBED_MODEL = "nvidia/nemotron-3.5-embed-1b:free"
 CHAT_MODEL = "gemma3:4b"   # use the exact name from `ollama list`
+
 SYSTEM_PROMPT = """You are an assistant that answers questions about the FitStyle AI project documentation.
 
 Rules:
@@ -24,16 +22,9 @@ Rules:
 """
 
 
-def answer_question(question: str) -> tuple[str, list[int]]:
-    """Answer a question using the saved document embeddings."""
-    question = question.strip()
-    if not question:
-        raise ValueError("Please enter a question.")
-
-    api_key = os.getenv("OPENROUTER_API_KEY")
-    if not api_key:
-        raise RuntimeError("OPENROUTER_API_KEY is missing. Add it to the project's .env file.")
-
+@lru_cache(maxsize=1)
+def load_index():
+    """Load the models and saved files once, on the first question."""
     vectors_path = BASE_DIR / "vectors.npy"
     data_path = BASE_DIR / "embeddings.json"
     if not vectors_path.exists() or not data_path.exists():
@@ -43,20 +34,28 @@ def answer_question(question: str) -> tuple[str, list[int]]:
     with data_path.open(encoding="utf-8") as f:
         data = json.load(f)
 
-    # OpenRouter client: only for the embedding
-    client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=api_key)
-
-    # local Ollama client: for the answer
+    embed_model = SentenceTransformer("all-MiniLM-L6-v2")
     ollama_client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+    return vectors, data, embed_model, ollama_client
 
-    embedding = client.embeddings.create(model=EMBED_MODEL, input=[question])
-    q_vec = np.asarray(embedding.data[0].embedding)
-    q_vec = q_vec / np.linalg.norm(q_vec)
 
+def answer_question(question: str) -> tuple[str, list[int]]:
+    """Answer a question using the saved document embeddings."""
+    question = question.strip()
+    if not question:
+        raise ValueError("Please enter a question.")
+
+    vectors, data, embed_model, ollama_client = load_index()
+
+    # turn the question into a vector (same model as the chunks)
+    q_vec = embed_model.encode([question], normalize_embeddings=True)[0]
+
+    # find the 6 closest chunks
     top = np.argsort(vectors @ q_vec)[::-1][:6]
     context = "\n\n".join(data[int(i)]["text"] for i in top)
     pages = sorted({data[int(i)]["page"] for i in top})
 
+    # let the local model answer from those chunks
     response = ollama_client.chat.completions.create(
         model=CHAT_MODEL,
         temperature=0,
