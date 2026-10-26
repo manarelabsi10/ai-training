@@ -7,7 +7,7 @@ from openai import OpenAI
 from sentence_transformers import SentenceTransformer
 
 BASE_DIR = Path(__file__).resolve().parent
-CHAT_MODEL = "gemma3:1b"   # exact name from `ollama list`
+CHAT_MODEL = "qwen2.5:1.5b"  # exact name from `ollama list`
 MAX_TURNS = 3              # how many previous Q&A pairs we remember
 
 ANSWER_PROMPT = """You are an assistant that answers questions about the provided documents.
