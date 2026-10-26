@@ -171,7 +171,7 @@ Branch: `session2`
 - Used the local Sentence Transformers embedding model **`all-MiniLM-L6-v2`** to create normalized vectors for both document passages and questions. This is the embedding model, not the answer-generating chat model.
 - Retrieved the most relevant passages across the documents, with an optional filter to search within one selected source PDF.
 - Added short-term conversation memory: the system uses up to the last three question-and-answer turns to rewrite follow-up questions (for example, resolving “what about its cost?” into a complete question) and maintain context while answering.
-- Used Ollama's **`gemma3:1b`** model as the local chat model to rewrite follow-ups and generate answers from the retrieved passages. Answers include the source PDF names and page numbers.
+- Used Ollama's **`qwen2.5:1.5b`** model as the local chat model to rewrite follow-ups and generate answers from the retrieved passages. Answers include the source PDF names and page numbers.
 - Included sample PDFs on FitStyle AI, ancient Egyptian history, cloud computing, the global coffee industry, and solar PV.
 
 Branch: `session-2-assignment`
