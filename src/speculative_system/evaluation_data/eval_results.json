@@ -1,0 +1,554 @@
+[
+  {
+    "question": "What is the name of the model used for virtual try-on?",
+    "ground_truth": "LaDI-VTON",
+    "spec_answer": "Model 3",
+    "baseline_answer": "Model 3",
+    "draft_answers": [
+      "Model 3",
+      "Model 3",
+      "Model 3"
+    ],
+    "scores": [
+      2.0,
+      2.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 0.125,
+    "subset_hit": true,
+    "oracle": false,
+    "spec_correct": false,
+    "baseline_correct": false,
+    "spec_latency": 38.50908398628235,
+    "baseline_latency": 21.543927431106567,
+    "failure_stage": "drafter",
+    "status": "ok"
+  },
+  {
+    "question": "Which database is used?",
+    "ground_truth": [
+      "DynamoDB",
+      "Amazon DynamoDB"
+    ],
+    "spec_answer": "Amazon DynamoDB",
+    "baseline_answer": "Amazon DynamoDB",
+    "draft_answers": [
+      "Amazon DynamoDB",
+      "The web application uses cloud services within free-tier limits.",
+      "The database is cloud services within free-tier limits."
+    ],
+    "scores": [
+      10.0,
+      4.0,
+      4.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 0.5,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 23.523919582366943,
+    "baseline_latency": 12.6610586643219,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which service handles user authentication?",
+    "ground_truth": "Cognito",
+    "spec_answer": "Amazon Cognito",
+    "baseline_answer": "Amazon Cognito",
+    "draft_answers": [
+      "Amazon Cognito",
+      "Amazon Cognito",
+      "Amazon Cognito"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 17.815870761871338,
+    "baseline_latency": 10.905211210250854,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which model provides the pose landmarks and silhouette mask for body measurement?",
+    "ground_truth": "MediaPipe",
+    "spec_answer": "The MediaPipe Pose Landmarker",
+    "baseline_answer": "MediaPipe Pose Landmarker",
+    "draft_answers": [
+      "MediaPipe Pose Landmarker documentation",
+      "MediaPipe Pose Landmarker",
+      "The MediaPipe Pose Landmarker"
+    ],
+    "scores": [
+      9.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 33.22015881538391,
+    "baseline_latency": 19.520845413208008,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which vision-language model is used as a fallback when the measurement service is unavailable?",
+    "ground_truth": "Qwen2.5-VL",
+    "spec_answer": "Qwen2.5-VL",
+    "baseline_answer": "Qwen2.5-VL",
+    "draft_answers": [
+      "Qwen2.5-VL",
+      "Qwen2.5-VL",
+      "Qwen2.5-VL"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 31.567407369613647,
+    "baseline_latency": 18.53796076774597,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which embedding model is used to represent the products?",
+    "ground_truth": [
+      "Marqo-FashionCLIP",
+      "FashionCLIP"
+    ],
+    "spec_answer": "Each product is represented by a frozen Marqo-FashionCLIP embedding [3].",
+    "baseline_answer": "Marqo-FashionCLIP",
+    "draft_answers": [
+      "Marqo-FashionCLIP",
+      "The image embedding v and a text embedding of the product description are computed.",
+      "Each product is represented by a frozen Marqo-FashionCLIP embedding [3]."
+    ],
+    "scores": [
+      10.0,
+      5.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 0.3333333333333333,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 23.956531047821045,
+    "baseline_latency": 14.788369178771973,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "How many products are in the catalogue?",
+    "ground_truth": "11,513",
+    "spec_answer": "11,513",
+    "baseline_answer": "11,513",
+    "draft_answers": [
+      "11,513",
+      "11,513",
+      "11,513"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 21.44110131263733,
+    "baseline_latency": 13.931612730026245,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "What test accuracy did the linear compatibility model reach?",
+    "ground_truth": "0.932",
+    "spec_answer": "0.932",
+    "baseline_answer": "0.932",
+    "draft_answers": [
+      "0.932",
+      "0.789",
+      "0.932"
+    ],
+    "scores": [
+      10.0,
+      2.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 21.76620364189148,
+    "baseline_latency": 12.722856760025024,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which GPU does the virtual try-on service run on?",
+    "ground_truth": "T4",
+    "spec_answer": "The virtual try-on service runs on a free Colab T4 GPU.",
+    "baseline_answer": "The virtual try-on service runs on a free Colab T4 GPU.",
+    "draft_answers": [
+      "The virtual try-on service runs on a free Colab T4 GPU.",
+      "The virtual try-on service runs on a free GPU notebook runtime.",
+      "A free GPU notebook runtime"
+    ],
+    "scores": [
+      10.0,
+      7.0,
+      8.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 0.3333333333333333,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 26.011711835861206,
+    "baseline_latency": 15.133275747299194,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Who is the supervisor of the project?",
+    "ground_truth": "Anwar Hossain",
+    "spec_answer": "Dr. Anwar Hossain",
+    "baseline_answer": "Dr. Anwar Hossain",
+    "draft_answers": [
+      "Dr. Anwar Hossain",
+      "Dr. Anwar Hossain",
+      "Dr. Anwar Hossain"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 19.969752311706543,
+    "baseline_latency": 11.536943435668945,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Who designed the Step Pyramid of Djoser at Saqqara?",
+    "ground_truth": "Imhotep",
+    "spec_answer": "Imhotep",
+    "baseline_answer": "Imhotep",
+    "draft_answers": [
+      "Imhotep",
+      "Imhotep",
+      "Imhotep"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 23.502286911010742,
+    "baseline_latency": 14.188575029373169,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which pharaoh built the Great Pyramid at Giza?",
+    "ground_truth": [
+      "Khufu",
+      "Cheops"
+    ],
+    "spec_answer": "Khufu",
+    "baseline_answer": "Khufu",
+    "draft_answers": [
+      "Khufu",
+      "Khufu",
+      "Khufu"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 0.5,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 24.721970319747925,
+    "baseline_latency": 13.902539730072021,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "What was the original height of the Great Pyramid of Giza in metres?",
+    "ground_truth": "146.6",
+    "spec_answer": "The original height of the Great Pyramid of Giza was approximately 146.6 meters.",
+    "baseline_answer": "The original height of the Great Pyramid of Giza was approximately 146. 6 meters.",
+    "draft_answers": [
+      "The original height of the Great Pyramid of Giza was approximately 146.6 meters.",
+      "The original height of the Great Pyramid of Giza was approximately 146. 6 meters.",
+      "The original height of the Great Pyramid of Giza was approximately 146.6 meters."
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": false,
+    "spec_latency": 25.911656618118286,
+    "baseline_latency": 11.751696348190308,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which pharaoh expelled the Hyksos and founded the Eighteenth Dynasty?",
+    "ground_truth": "Ahmose",
+    "spec_answer": "Ahmose I",
+    "baseline_answer": "Ahmose I",
+    "draft_answers": [
+      "Ahmose I",
+      "Ahmose I",
+      "Ahmose I"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 38.645113945007324,
+    "baseline_latency": 13.245724439620972,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which king reunified Egypt around 2055 BCE and began the Middle Kingdom?",
+    "ground_truth": "Mentuhotep",
+    "spec_answer": "Mentuhotep II of the Eleventh Dynasty",
+    "baseline_answer": "Amenemhat I",
+    "draft_answers": [
+      "Mentuhotep II of the Eleventh Dynasty",
+      "Amenemhat I",
+      "Mentuhotep II of the Eleventh Dynasty"
+    ],
+    "scores": [
+      10.0,
+      2.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 0.16666666666666666,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": false,
+    "spec_latency": 25.169826984405518,
+    "baseline_latency": 15.848054885864258,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which pharaoh ruled Egypt for sixty-six years?",
+    "ground_truth": [
+      "Ramesses II",
+      "Ramesses the Great"
+    ],
+    "spec_answer": "Ramesses II",
+    "baseline_answer": "Ramesses II",
+    "draft_answers": [
+      "Psamtik I",
+      "Seti I",
+      "Ramesses II"
+    ],
+    "scores": [
+      0.0,
+      0.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 25.41260313987732,
+    "baseline_latency": 16.440434217453003,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "In what year did Howard Carter discover the tomb of Tutankhamun?",
+    "ground_truth": "1922",
+    "spec_answer": "1922",
+    "baseline_answer": "1922",
+    "draft_answers": [
+      "1922",
+      "1922",
+      "1922"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 28.906660795211792,
+    "baseline_latency": 14.048383474349976,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which French scholar announced the decipherment of hieroglyphs in 1822?",
+    "ground_truth": "Champollion",
+    "spec_answer": "Jean-François Champollion",
+    "baseline_answer": "Jean-François Champollion",
+    "draft_answers": [
+      "Jean-François Champollion",
+      "Jean-François Champollion",
+      "Jean-François Champollion"
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 20.675599336624146,
+    "baseline_latency": 16.14285969734192,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "How many columns does the Hypostyle Hall at Karnak contain?",
+    "ground_truth": "134",
+    "spec_answer": "The Hypostyle Hall at Karnak contains 134 columns.",
+    "baseline_answer": "134",
+    "draft_answers": [
+      "The Hypostyle Hall at Karnak contains 134 columns.",
+      "134",
+      "The Hypostyle Hall at Karnak contains 134 columns."
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 22.6983802318573,
+    "baseline_latency": 13.180041551589966,
+    "failure_stage": null,
+    "status": "ok"
+  },
+  {
+    "question": "Which monster devours the heart if it is heavier than the feather of Maat?",
+    "ground_truth": "Ammit",
+    "spec_answer": "The monster Ammit devours the heart if it is heavier than the feather of Maat.",
+    "baseline_answer": "Ammit",
+    "draft_answers": [
+      "The monster Ammit devours the heart if it is heavier than the feather of Maat.",
+      "Ammit",
+      "The monster Ammit devours the heart if it is heavier than the feather of Maat."
+    ],
+    "scores": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "verifier_evidence": "",
+    "retrieval_hit": true,
+    "reciprocal_rank": 1.0,
+    "subset_hit": true,
+    "oracle": true,
+    "spec_correct": true,
+    "baseline_correct": true,
+    "spec_latency": 24.695738554000854,
+    "baseline_latency": 11.831922769546509,
+    "failure_stage": null,
+    "status": "ok"
+  }
+]

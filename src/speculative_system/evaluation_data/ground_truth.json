@@ -1,0 +1,23 @@
+[
+  {"question": "What is the name of the model used for virtual try-on?", "ground_truth": "LaDI-VTON"},
+  {"question": "Which database is used?", "ground_truth": ["DynamoDB", "Amazon DynamoDB"]},
+  {"question": "Which service handles user authentication?", "ground_truth": "Cognito"},
+  {"question": "Which model provides the pose landmarks and silhouette mask for body measurement?", "ground_truth": "MediaPipe"},
+  {"question": "Which vision-language model is used as a fallback when the measurement service is unavailable?", "ground_truth": "Qwen2.5-VL"},
+  {"question": "Which embedding model is used to represent the products?", "ground_truth": ["Marqo-FashionCLIP", "FashionCLIP"]},
+  {"question": "How many products are in the catalogue?", "ground_truth": "11,513"},
+  {"question": "What test accuracy did the linear compatibility model reach?", "ground_truth": "0.932"},
+  {"question": "Which GPU does the virtual try-on service run on?", "ground_truth": "T4"},
+  {"question": "Who is the supervisor of the project?", "ground_truth": "Anwar Hossain"},
+
+  {"question": "Who designed the Step Pyramid of Djoser at Saqqara?", "ground_truth": "Imhotep"},
+  {"question": "Which pharaoh built the Great Pyramid at Giza?", "ground_truth": ["Khufu", "Cheops"]},
+  {"question": "What was the original height of the Great Pyramid of Giza in metres?", "ground_truth": "146.6"},
+  {"question": "Which pharaoh expelled the Hyksos and founded the Eighteenth Dynasty?", "ground_truth": "Ahmose"},
+  {"question": "Which king reunified Egypt around 2055 BCE and began the Middle Kingdom?", "ground_truth": "Mentuhotep"},
+  {"question": "Which pharaoh ruled Egypt for sixty-six years?", "ground_truth": ["Ramesses II", "Ramesses the Great"]},
+  {"question": "In what year did Howard Carter discover the tomb of Tutankhamun?", "ground_truth": "1922"},
+  {"question": "Which French scholar announced the decipherment of hieroglyphs in 1822?", "ground_truth": "Champollion"},
+  {"question": "How many columns does the Hypostyle Hall at Karnak contain?", "ground_truth": "134"},
+  {"question": "Which monster devours the heart if it is heavier than the feather of Maat?", "ground_truth": "Ammit"}
+]

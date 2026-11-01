@@ -3,3 +3,7 @@
 __pycache__/
 *.py[cod]
 .streamlit/secrets.toml
+*.log
+src/speculative_system/chroma_db/
+JSON-chat-history/
+settings.json

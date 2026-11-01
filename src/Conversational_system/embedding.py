@@ -4,13 +4,34 @@ from pathlib import Path
 import numpy as np
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
+import re
 
 BASE_DIR = Path(__file__).resolve().parent
 DOCS_DIR = BASE_DIR / "docs"   # put all your pdfs here
 
 # split text into small chunks
-def chunk_text(text, size=500, overlap=50):
-    return [text[i:i + size] for i in range(0, len(text), size - overlap)]
+
+def chunk_text(text, size=700):
+    """Split text on sentence ends, so no sentence is cut in the middle."""
+    text = re.sub(r"\s+", " ", text).strip()
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    chunks, current, last = [], "", ""
+    for s in sentences:
+        while len(s) > size:               # one very long sentence: cut it
+            if current:
+                chunks.append(current)
+                current = ""
+            chunks.append(s[:size])
+            s = s[size:]
+        if current and len(current) + len(s) + 1 > size:
+            chunks.append(current)
+            current = (last + " " + s).strip()   # keep the last sentence as overlap
+        else:
+            current = (current + " " + s).strip()
+        last = s
+    if current:
+        chunks.append(current)
+    return chunks
 
 pdf_files = sorted(DOCS_DIR.glob("*.pdf"))
 if not pdf_files:

@@ -11,6 +11,8 @@ test-app/
 │   │   ├── __init__.py
 │   │   ├── main.py              # Gemini text summarizer
 │   │   └── local.py             # Ollama text summarizer
+│   ├── chatbot_ui/
+│   │   └── app.py               # Shared UI for the project's RAG systems
 │   ├── rag_system/
 │   │   ├── app.py               # Streamlit chat interface
 │   │   ├── ask.py               # Document retrieval and answer generation
@@ -20,17 +22,22 @@ test-app/
 │   │   ├── embeddings.json      # Indexed text chunks and page numbers
 │   │   ├── vectors.npy          # Saved document vectors
 │   │   └── logo.png             # FitStyle AI logo and browser icon
-│   └── Conversational_system/
-│       ├── ask_conversational.py # Conversational multi-document RAG search
-│       ├── embedding.py          # Indexes all PDFs in docs/
-│       ├── embeddings.json       # Chunks with source filenames and pages
-│       ├── vectors.npy           # Saved vectors for the PDF chunks
-│       └── docs/                 # Source PDFs for multi-document search
-│           ├── Ancient_Egypt_History.pdf
-│           ├── cloud_computing.pdf
-│           ├── FitStyle_AI_Documentation_final (1).pdf
-│           ├── Global_Coffee_Industry_Reference.pdf
-│           └── Solar_PV_Technical_Reference.pdf
+│   ├── Conversational_system/
+│   │   ├── ask_conversational.py # Conversational multi-document RAG search
+│   │   ├── embedding.py          # Indexes all PDFs in docs/
+│   │   ├── embeddings.json       # Chunks with source filenames and pages
+│   │   ├── vectors.npy           # Saved vectors for the PDF chunks
+│   │   └── docs/                 # Source PDFs for multi-document search
+│   │       ├── Ancient_Egypt_History.pdf
+│   │       ├── cloud_computing.pdf
+│   │       ├── FitStyle_AI_Documentation_final (1).pdf
+│   │       ├── Global_Coffee_Industry_Reference.pdf
+│   │       └── Solar_PV_Technical_Reference.pdf
+│   └── agentic_rag/
+│       ├── agent.py              # Agentic RAG implementation
+│       ├── agent_updated.py      # Updated implementation
+│       ├── agent_updated_v2.py   # Updated implementation
+│       └── agent_updated_v3.py   # Updated implementation
 ├── .env.example
 ├── pyproject.toml
 ├── uv.lock
@@ -62,6 +69,16 @@ test-app/
    Keep Ollama running while using the chat app. If you use a different model, update `CHAT_MODEL` in `src/rag_system/ask.py` to the exact name shown by `ollama list`.
 
 ## Run the applications
+
+### Shared RAG chatbot UI
+
+Start the shared interface for a selected RAG system from the project root. The command opens the browser UI, where you can enter questions; it does not ask questions in the terminal:
+
+```powershell
+uv run python src/chatbot_ui/launch.py agentic_updated
+```
+
+Replace `agentic_updated` with the system to run: `rag_system`, `conversational`, `agentic`, `agentic_updated`, or `speculative`. Each one opens the same chat interface with that RAG system selected, and each keeps its own chat history. The systems still require their configured services and credentials (for example, Ollama or Gemini). The double-click `Launch RAG Assistant.vbs` shortcut opens the default `rag_system` interface.
 
 ### FitStyle AI document chat
 
