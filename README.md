@@ -1,6 +1,6 @@
 # ML Training
 
-Weekly sessions for learning to work with AI APIs in Python. The project includes Gemini and local Ollama summarizers, a single-document FitStyle AI RAG chat app, and a conversational multi-document RAG search tool.
+Weekly sessions for learning to work with AI APIs and retrieval-augmented generation (RAG) in Python. The project includes Gemini and Ollama summarizers, document chat applications, and several RAG experiments.
 
 ## Project structure
 
@@ -12,7 +12,8 @@ test-app/
 │   │   ├── main.py              # Gemini text summarizer
 │   │   └── local.py             # Ollama text summarizer
 │   ├── chatbot_ui/
-│   │   └── app.py               # Shared UI for the project's RAG systems
+│   │   ├── app.py               # Streamlit chat interface for Speculative RAG
+│   │   └── launch.py            # Launcher for the chat interface
 │   ├── rag_system/
 │   │   ├── app.py               # Streamlit chat interface
 │   │   ├── ask.py               # Document retrieval and answer generation
@@ -23,21 +24,17 @@ test-app/
 │   │   ├── vectors.npy          # Saved document vectors
 │   │   └── logo.png             # FitStyle AI logo and browser icon
 │   ├── Conversational_system/
-│   │   ├── ask_conversational.py # Conversational multi-document RAG search
-│   │   ├── embedding.py          # Indexes all PDFs in docs/
-│   │   ├── embeddings.json       # Chunks with source filenames and pages
-│   │   ├── vectors.npy           # Saved vectors for the PDF chunks
-│   │   └── docs/                 # Source PDFs for multi-document search
-│   │       ├── Ancient_Egypt_History.pdf
-│   │       ├── cloud_computing.pdf
-│   │       ├── FitStyle_AI_Documentation_final (1).pdf
-│   │       ├── Global_Coffee_Industry_Reference.pdf
-│   │       └── Solar_PV_Technical_Reference.pdf
+│   │   ├── ask_conversational.py # Conversational multi-document search
+│   │   ├── embedding.py          # Builds the multi-document index
+│   │   ├── embeddings.json       # Indexed chunks and source pages
+│   │   └── vectors.npy           # Saved document vectors
 │   └── agentic_rag/
-│       ├── agent.py              # Agentic RAG implementation
-│       ├── agent_updated.py      # Updated implementation
-│       ├── agent_updated_v2.py   # Updated implementation
-│       └── agent_updated_v3.py   # Updated implementation
+│   │   ├── agent.py              # Agentic RAG implementation
+│   │   └── agent_updated.py      # Updated agentic implementation
+│   ├── speculative_system/
+│   │   └── Speculative_RAG.py   # Speculative RAG pipeline
+│   ├── docs/                     # Sample PDFs used by the RAG systems
+│   └── logging_config.py         # Shared logging configuration
 ├── .env.example
 ├── pyproject.toml
 ├── uv.lock
@@ -53,11 +50,15 @@ test-app/
    uv sync
    ```
 
-3. Copy `.env.example` to `.env` and add your Gemini key if you plan to use the Gemini summarizer.
+3. Copy `.env.example` to `.env` and fill in the credentials required by the app you plan to use. The Gemini summarizer needs a Gemini key; Speculative RAG uses OpenRouter embeddings, an Ollama draft model, and Gemini verification.
 
    ```ini
    GEMINI_API_KEY=your_gemini_key
    GEMINI_MODEL=gemini-3.8-flash
+   OPENROUTER_API_KEY=your_openrouter_key
+   OPENROUTER_MODEL=openai/text-embedding-3-small
+   OLLAMA_HOST=your_ollama_url
+   LOCAL_MODEL=your_ollama_model
    ```
 
 4. Download the chat model used by the RAG app:
@@ -70,15 +71,15 @@ test-app/
 
 ## Run the applications
 
-### Shared RAG chatbot UI
+### Speculative RAG chat
 
-Start the shared interface for a selected RAG system from the project root. The command opens the browser UI, where you can enter questions; it does not ask questions in the terminal:
+Start the Streamlit chat interface from the project root:
 
-```powershell
-uv run python src/chatbot_ui/launch.py agentic_updated
+```bash
+uv run python src/chatbot_ui/launch.py
 ```
 
-Replace `agentic_updated` with the system to run: `rag_system`, `conversational`, `agentic`, `agentic_updated`, or `speculative`. Each one opens the same chat interface with that RAG system selected, and each keeps its own chat history. The systems still require their configured services and credentials (for example, Ollama or Gemini). The double-click `Launch RAG Assistant.vbs` shortcut opens the default `rag_system` interface.
+The launcher opens the interface in a browser. The backend builds or updates its local Chroma index from PDFs in `src/docs/`. Set the OpenRouter, Ollama, and Gemini values in `.env` before asking questions. Use `--port` to choose another port or `--headless` to avoid opening a browser automatically.
 
 ### FitStyle AI document chat
 
@@ -99,7 +100,7 @@ uv run python embedding.py
 
 ### Multi-document conversational search
 
-The conversational search scripts build an index from every PDF in `src/Conversational_system/docs/`. Each indexed passage records its document name and page number. Search uses the same local `all-MiniLM-L6-v2` model, while Ollama (`gemma3:1b`) rewrites follow-up questions and generates answers using recent conversation history.
+The conversational search scripts build an index from every PDF in `src/Conversational_system/docs/`. Each indexed passage records its document name and page number. Search uses the local `all-MiniLM-L6-v2` model, while Ollama (`qwen2.5:1.5b`) rewrites follow-up questions and generates answers using recent conversation history.
 
 To rebuild the multi-document index after adding or changing PDFs:
 
@@ -113,7 +114,11 @@ To try the conversational search in the terminal:
 uv run python src/Conversational_system/ask_conversational.py
 ```
 
-Enter `exit` to end the chat. Keep Ollama running and pull the configured model with `ollama pull gemma3:1b` first. The first embedding run downloads the local Sentence Transformers model.
+Enter `exit` to end the chat. Keep Ollama running and pull the configured model with `ollama pull qwen2.5:1.5b` first. The first embedding run downloads the local Sentence Transformers model.
+
+### Agentic RAG experiments
+
+The `src/agentic_rag/` folder contains the original and updated agentic retrieval experiments. The updated implementation uses the saved multi-document index in `src/Conversational_system/` by default; set `RAG_INDEX_DIR` to use another index directory.
 
 ### Gemini summarizer
 
@@ -193,8 +198,17 @@ Branch: `session2`
 
 Branch: `session-2-assignment`
 
+### Session 3: Agentic and Speculative RAG
+
+- Added agentic RAG implementations that split complex questions into smaller searches, handle follow-up questions, and select relevant passages from the document index.
+- Added a Speculative RAG pipeline that drafts candidate answers with a local Ollama model and verifies them with Gemini against retrieved document evidence.
+- Added a Streamlit chat interface for the Speculative RAG pipeline, with chat history and adjustable retrieval settings.
+- Added sample PDFs and evaluation scripts for inspecting retrieval and answer quality.
+
+Branch: `session3`
+
 ## Notes
 
-- Ollama must be running with the model configured in the relevant chat script (`gemma3:4b` for FitStyle AI, `gemma3:1b` for conversational search).
+- Ollama must be running with the model configured in the relevant chat script (`gemma3:4b` for FitStyle AI, `qwen2.5:1.5b` for conversational search, or the model set by `LOCAL_MODEL` for Speculative RAG).
 - The first use of Sentence Transformers may download `all-MiniLM-L6-v2` and requires an internet connection.
 - `.env` is local configuration and should never be committed.
