@@ -198,13 +198,51 @@ Branch: `session2`
 
 Branch: `session-2-assignment`
 
-### Session 3: Agentic and Speculative RAG
+## Speculative RAG
 
-- Added agentic RAG implementations that split complex questions into smaller searches, handle follow-up questions, and select relevant passages from the document index.
-- Added a Speculative RAG pipeline that drafts candidate answers with a local Ollama model and verifies them with Gemini against retrieved document evidence.
-- Added a Streamlit chat interface for the Speculative RAG pipeline, with chat history and adjustable retrieval settings.
-- Added sample PDFs and evaluation scripts for inspecting retrieval and answer quality.
+A question-answering pipeline over PDF documents. A small local model writes several draft answers from different slices of the retrieved text, and a stronger model (Gemini) scores the drafts and picks the best one.
 
+### How it works
+
+1. **Indexing**: each PDF is split into overlapping chunks (600 characters, 150 overlap), embedded through OpenRouter, and stored in ChromaDB. Every file is hashed, so unchanged PDFs are skipped and a changed file replaces its old chunks.
+2. **Retrieval**: the top-k chunks for the question are fetched from ChromaDB.
+3. **Clustering**: the retrieved chunks are clustered with KMeans, and each draft gets the two top-ranked chunks plus one chunk from every cluster.
+4. **Drafting**: a local Ollama model writes one answer and a supporting quote (rationale) per subset, in parallel.
+5. **Verification**: Gemini scores every draft from 0 to 10 using only the source passages, and the best-scoring draft becomes the final answer.
+6. **No-answer guard**: if even the best draft scores below `MIN_ACCEPT_SCORE` (default 3), the system replies that it couldn't find the answer in the documents instead of showing a guess.
+
+### What's included
+
+- `answer_question()` returns the answer together with the source file names.
+- `ingest_pdf()`, `list_documents()` and `delete_document()` let the UI upload, list and remove documents.
+- An empty index or an empty `docs/` folder is handled without errors, so PDFs can be uploaded later from the UI.
+- Answers are 3 to 5 sentences, built only from facts in the documents.
+
+### Logging
+
+- One shared `src/logging_config.py` configures logging for the whole project (UI, pipeline and evaluation).
+- Every entry has a timestamp, level, logger name and message, and is written to `logs/app.log`.
+- Levels: `DEBUG` for details (chunks retrieved, drafts), `INFO` for pipeline stages and verification scores, `WARNING` for retries and empty results, `ERROR` for failed calls, `CRITICAL` for missing configuration.
+- Noisy library loggers (`httpx`, `chromadb`, etc.) are limited to `WARNING`.
+- The `logs/` folder is ignored by git.
+
+### Running
+
+```
+# chat UI
+uv run python src/chatbot_ui/launch.py
+
+# command line
+uv run python src/speculative_system/Speculative_RAG.py
+
+# evaluation
+uv run python src/speculative_system/evaluation_scripts/evaluate.py
+```
+
+### Notes
+
+- The evaluation compares Speculative RAG with a plain RAG baseline and reports retrieval, drafting, verification and end-to-end accuracy, plus the stage where each wrong answer was lost.
+- Changing `DRAFT_PROMPT` affects the evaluation, so results from before and after a prompt change are not directly comparable.
 Branch: `session3`
 
 ## Notes
