@@ -12,6 +12,7 @@ import pymupdf
 import ollama
 import threading
 import sys
+import unicodedata
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -22,9 +23,9 @@ import logging
 
 # the shared logging_config.py lives in src/, one level above this folder
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from logging_config import setup_logging  # noqa: E402
+from logging_config import setup_logging  
 
-setup_logging()
+setup_logging(reset=(__name__ == "__main__"))
 logger = logging.getLogger(__name__)
 
 # --------------------------------------------------------------------------- #
@@ -61,9 +62,10 @@ gemini_client = genai.Client(
     ),
 )
 
-CHUNK_SIZE = 600
-OVERLAP = 150
+CHUNK_SIZE = 1000
+OVERLAP = 200
 EMBED_BATCH_SIZE = 20
+INDEX_VERSION = "clean2"
 
 BASE_DIR = Path(__file__).resolve().parent
 CHROMA_PATH = str(BASE_DIR / "chroma_db")
@@ -104,6 +106,41 @@ def extract_pdf(pdf_path):
                 lines.append(line)
     return "\n".join(lines)
 
+def clean_text(text):
+    # turn ligatures like "ﬁ" into normal letters ("fi")
+    text = unicodedata.normalize("NFKC", text)
+    # join words that were split at the end of a line: "specifi-\ncations" -> "specifications"
+    text = re.sub(r"-\n(\w)", r"\1", text)
+    # collapse extra spaces and new lines
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+def looks_like_toc(chunk):
+    """Return True if a chunk looks like a table of contents or a list of titles."""
+    words = chunk.split()
+    if not words:
+        return True
+    # mostly page numbers
+    if sum(w.isdigit() for w in words) / len(words) > 0.25:
+        return True
+    # mostly Title Case words (chapter titles) instead of normal prose
+    alpha = [w for w in words if w[0].isalpha()]
+    if alpha and sum(w[0].isupper() for w in alpha) / len(alpha) > 0.6:
+        return True
+    return False
+
+MAX_CHUNK_CHARS = 2000
+
+def fix_chunk_sizes(chunks):
+    """Drop empty chunks and split chunks that are too long for the embedding model."""
+    fixed = []
+    for c in chunks:
+        for i in range(0, len(c), MAX_CHUNK_CHARS):
+            piece = c[i:i + MAX_CHUNK_CHARS].strip()
+            if piece:
+                fixed.append(piece)
+    return fixed
+
 
 def split_text_to_chunks(text):
     """Split text into whole-sentence chunks with overlap."""
@@ -136,6 +173,9 @@ def get_embeddings(texts):
             json={"model": EMBED_MODEL, "input": batch},
             timeout=60,
         )
+        if not response.ok:
+            print(f"Embeddings error: {response.text[:500]}")
+            logger.error("Embeddings request failed: %s", response.text[:500])
         response.raise_for_status()
         data = sorted(response.json()["data"], key=lambda item: item["index"])
         vectors.extend(item["embedding"] for item in data)
@@ -161,7 +201,7 @@ def ingest_pdf(pdf_path, name=None, progress_callback=None):
     """
     pdf_path = str(pdf_path)
     name = name or os.path.basename(pdf_path)
-    file_hash = file_sha256(pdf_path)
+    file_hash = file_sha256(pdf_path) + "_" + INDEX_VERSION
     collection = get_chroma_collection()
 
     if collection.get(where={"file_hash": file_hash}, limit=1)["ids"]:
@@ -171,31 +211,41 @@ def ingest_pdf(pdf_path, name=None, progress_callback=None):
     # same name, different content: drop the stale version first
     collection.delete(where={"source": name})
 
-    chunks = split_text_to_chunks(extract_pdf(pdf_path))
+    chunks = split_text_to_chunks(clean_text(extract_pdf(pdf_path)))
+    before = len(chunks)
+    chunks = [c for c in chunks if not looks_like_toc(c)]
+    logger.info("%s: skipped %d table-of-contents chunks", name, before - len(chunks))
+    chunks = fix_chunk_sizes(chunks)
     if not chunks:
         logger.warning("No text could be extracted from %s", name)
         return "empty", 0
+    logger.info("%s: longest chunk is %d chars", name, max(len(c) for c in chunks))
 
     total = len(chunks)
-    for start in range(0, total, EMBED_BATCH_SIZE):
-        batch = chunks[start:start + EMBED_BATCH_SIZE]
-        collection.add(
-            documents=batch,
-            embeddings=get_embeddings(batch),
-            metadatas=[{
-                "source": name,
-                "file_hash": file_hash,
-                "embed_model": EMBED_MODEL,
-            }] * len(batch),
-            ids=[f"{file_hash[:16]}_{start + j}" for j in range(len(batch))],
-        )
-        if progress_callback:
-            progress_callback(min(start + len(batch), total), total)
+    try:
+        for start in range(0, total, EMBED_BATCH_SIZE):
+            batch = chunks[start:start + EMBED_BATCH_SIZE]
+            collection.add(
+                documents=batch,
+                embeddings=get_embeddings(batch),
+                metadatas=[{
+                    "source": name,
+                    "file_hash": file_hash,
+                    "embed_model": EMBED_MODEL,
+                }] * len(batch),
+                ids=[f"{file_hash[:16]}_{start + j}" for j in range(len(batch))],
+            )
+            if progress_callback:
+                progress_callback(min(start + len(batch), total), total)
+    except Exception:
+        # remove the partial book so the next run starts it from scratch
+        collection.delete(where={"file_hash": file_hash})
+        logger.exception("Indexing %s failed, partial chunks were removed", name)
+        raise
+
     logger.info("Indexed %s: %d chunks", name, total)
     print(f"Indexed {name}: {total} chunks")
     return "added", total
-
-
 def build_index():
     """Make sure every PDF in DOCS_DIR is indexed.
 
@@ -271,9 +321,9 @@ def cluster(embeddings, n_clusters=3):
     return kmeans.fit_predict(embeddings)
 
 
-def build_subsets(docs, labels, n_subsets=3):
-    """Share the two highest-ranked chunks, then diversify by cluster."""
-    shared_count = min(2, len(docs))
+def build_subsets(docs, labels, n_subsets=3, shared_count=1):
+    """Share the top chunks, then diversify by cluster."""
+    shared_count = min(shared_count, len(docs))
     shared_docs = docs[:shared_count]
     groups = {}
     for doc, label in zip(docs[shared_count:], labels[shared_count:]):
@@ -286,7 +336,7 @@ def build_subsets(docs, labels, n_subsets=3):
     logger.debug("Built %d subsets (%d shared chunks)", len(subsets), shared_count)
     return subsets
 
-
+   
 # --------------------------------------------------------------------------- #
 # Drafting (local Ollama model)
 # --------------------------------------------------------------------------- #
@@ -319,13 +369,24 @@ def draft(question, subset):
     prompt = DRAFT_PROMPT.format(docs=docs_text, question=question)
 
     logger.debug("Calling Ollama model %s with %d chunks", DRAFT_MODEL, len(subset))
-    res = ollama_client.chat(
-        model=DRAFT_MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        format="json",
-        options={"temperature": 0, "num_predict": 768, "repeat_penalty": 1.1},
-    )
-    raw = res["message"]["content"]
+    raw = None
+    # try twice: the second time with a higher temperature to break a repeat loop
+    for temperature in (0.2, 0.6):
+        try:
+            res = ollama_client.chat(
+                model=DRAFT_MODEL,
+                messages=[{"role": "user", "content": prompt}],
+                format="json",
+                options={"temperature": temperature, "num_predict": 768, "repeat_penalty": 1.15},
+            )
+            raw = res["message"]["content"]
+            break
+        except Exception as e:
+            logger.warning("Ollama call failed (temperature=%s): %s", temperature, e)
+
+    if raw is None:
+        return None            # the caller will skip this draft
+
     try:
         data = json.loads(raw)
         return {
@@ -356,6 +417,7 @@ Rules:
 - A candidate that says the information is missing scores low if a passage
   contains it.
 
+
 Question:
 {question}
 
@@ -364,6 +426,16 @@ Source passages (each passage appears once):
 
 Candidate drafts and the source passage indexes each draft saw:
 {candidates}
+
+Scoring rules:
+- Score each candidate using ONLY the source documents provided. Do not use your own knowledge.
+- If the answer contains a claim that is not supported by the source documents, lower the score, even if the claim is true in general.
+- If the answer is about a different subject than the question (for example, the question asks about one topic but the passage and answer describe a related but different topic), give it a low score.
+- If the source documents do not answer the question, give all candidates a low score (3 or less).
+- The answer must address every part of the question. If the question asks for a difference or a comparison between A and B, an answer that describes only one of them scores 5 or less.
+- Check the rationale: if the main claim in the answer does not appear in the quoted text or in the source passages, score it 3 or less, even if it sounds reasonable.
+- A long list of loosely related points is not better than a short, correct answer.
+- Do not give 10 unless the answer is fully supported by the documents and answers the whole question.
 
 Return JSON only in this shape:
 {{"scores": [8, 6, 4]}}
@@ -475,7 +547,7 @@ def verify(question, drafts, subsets, retries=5):
 # --------------------------------------------------------------------------- #
 
 # if even the best draft scores below this (0-10), the documents don't answer the question
-MIN_ACCEPT_SCORE = 3
+MIN_ACCEPT_SCORE = 4
 NO_ANSWER_MESSAGE = "I couldn't find the answer to this question in your documents."
 
 def answer_question(question, k=10, n_subsets=3):
@@ -494,10 +566,22 @@ def answer_question(question, k=10, n_subsets=3):
     labels = cluster(embs, n_clusters=n_subsets)
     subsets = build_subsets(docs, labels, n_subsets=n_subsets)
 
+    # debug: show the start of each chunk in each subset
+    for i, s in enumerate(subsets, start=1):
+        print(f"  Subset {i}: " + " | ".join(c[:40] for c in s))
+
     print(f"  Generating {n_subsets} answer drafts with Ollama...", flush=True)
     logger.info("Generating %d answer drafts with Ollama", n_subsets)
     with ThreadPoolExecutor(max_workers=n_subsets) as pool:
-        drafts = list(pool.map(lambda s: draft(question, s), subsets))
+        results = list(pool.map(lambda s: draft(question, s), subsets))
+
+    # keep only the drafts that worked, together with their own subsets
+    ok = [(d, s) for d, s in zip(results, subsets) if d is not None]
+    if not ok:
+        logger.error("All drafts failed for question: %s", question)
+        return "The local model failed to generate answers, please try again.", []
+    drafts = [d for d, _ in ok]
+    subsets = [s for _, s in ok]
 
     print("  Comparing drafts with Gemini...", flush=True)
     logger.info("Comparing drafts with Gemini")
