@@ -207,6 +207,17 @@ Branch: `session-2-assignment`
 
 Branch: `session3`
 
+### Session 4: Speculative RAG quality and reliability improvements
+
+- Cleaned extracted PDF text before indexing by normalizing ligatures, joining words split across lines, and removing table-of-contents chunks.
+- Increased chunk size and added a maximum chunk length so large passages are split before embedding.
+- Versioned the index so the cleaned chunks are re-indexed, and remove partially written chunks if indexing fails.
+- Improved draft generation by retrying Ollama calls with a higher temperature and continuing when an individual draft fails.
+- Strengthened answer verification to favor complete, evidence-supported answers and reject unsupported or off-topic drafts.
+- Replaced the sample PDFs in `src/docs/` with computer networking, computer system design, and software engineering documents.
+
+Branch: `session4`
+
 ## Notes
 
 - Ollama must be running with the model configured in the relevant chat script (`gemma3:4b` for FitStyle AI, `qwen2.5:1.5b` for conversational search, or the model set by `LOCAL_MODEL` for Speculative RAG).
